@@ -113,6 +113,8 @@ Table \@ref(fig:pobTab): Tabla de indicadores pobreza y protección social
 
 ```
 
+## Pobreza
+
 ### Evolucion
 
 ```{r pob-evo, results='asis', echo=FALSE}

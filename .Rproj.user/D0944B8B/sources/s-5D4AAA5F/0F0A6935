@@ -3,24 +3,24 @@
     "path": "~/GitHub/Indicadores COVID/01-Pobreza-protección-social.Rmd",
     "project_path": "01-Pobreza-protección-social.Rmd",
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "644544489",
     "contents": "",
-    "dirty": true,
+    "dirty": false,
     "created": 1636760780512.0,
     "source_on_save": false,
     "relative_order": 6,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "39,16",
-        "scrollLine": "30"
+        "cursorPosition": "90,100",
+        "scrollLine": "68"
     },
     "folds": "",
-    "lastKnownWriteTime": 1636755970,
+    "lastKnownWriteTime": 1636833112,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1636761180385,
+    "last_content_update": 1636833112628,
     "read_only": false,
     "read_only_alternatives": []
 }
