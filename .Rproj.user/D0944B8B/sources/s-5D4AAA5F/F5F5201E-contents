@@ -1,0 +1,172 @@
+# Educación {#cross}
+
+Esta sección contiene información acerda de los indicadores de tasa neta de asistencia, tasa de asistencia escolar por edad, porcentaje de jóvenes que no
+estudian ni trabajan, tasa de terminación escolar, tasa de abandono y tasa de sobreedad.
+
+
+```{r indicadores general, include=FALSE}
+
+source("Indicadores funciones.R")
+
+
+#### Table 
+
+table2 <- query_indicator(indicator = 'tasa_asis_edad,leavers,Ninis_2', 
+                         categories = 'age') %>% 
+  mutate(year = case_when(isoalpha3 == "CHL" & year == 2017 ~ 2019,
+                          isoalpha3 == "MEX" & year == 2018 ~ 2019,
+                          TRUE ~ year)) %>% 
+  group_by(isoalpha3, year) %>% 
+  mutate(value = mean(value, na.rm = TRUE), 
+         age = "Promedio", 
+         sample = NA_character_, 
+         cv = NA_character_, 
+         se = NA_character_) %>%
+  distinct() %>% 
+  rbind(grouped_mean(., value, indicator, year)) %>% 
+      ungroup() %>% 
+  select(country_name_es, year, indicator, value) %>% 
+  spread(indicator, value) 
+
+table <- query_indicator(indicator = 'tasa_neta_asis,tasa_sobre_edad,tasa_terminacion_c',
+                         categories = 'education_level') %>% 
+  mutate(year = case_when(isoalpha3 == "CHL" & year == 2017 ~ 2019,
+                          isoalpha3 == "MEX" & year == 2018 ~ 2019,
+                          TRUE ~ year)) %>% 
+  group_by(isoalpha3, year) %>% 
+  mutate(value = mean(value, na.rm = TRUE), 
+         education_level = "Promedio", 
+         sample = NA_character_, 
+         cv = NA_character_, 
+         se = NA_character_) %>%
+  distinct() %>% 
+  rbind(grouped_mean(., value, indicator, year)) %>% 
+      ungroup() %>% 
+  select(country_name_es,  year, indicator, value) %>% 
+  spread(indicator, value) %>% 
+  left_join(table2) %>% 
+  rename_all(funs(c('País', 'Año', 'Tasa neta de asistencia', 'Tasa sobreedad', 'Tasa terminación', 'Tasa abandono', 'Ninis', 'Tasa asistencia por edad'))) 
+
+promedio_list <-list()
+
+promedio_plots <-list()
+
+consulta <- scldataR::scldata_dict %>% 
+  select(collection, indicator, label_es) %>% 
+  filter(indicator == 'tasa_asis_edad' |indicator == 'leavers'| indicator == 'Ninis_2')
+
+vars <- set_names(consulta$indicator) 
+
+##### Promedios
+
+# for (i in names(vars)) {
+# 
+# promedio_list[[i]] <- 
+#   
+#   
+#   query_indicator(indicator = i, 
+#                                       countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA',
+#                                       categories = 'age') %>% 
+#   mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
+#                           year == 2018 & isoalpha3 == "MEX" ~2019, 
+#                           TRUE ~ year)) %>% 
+#   rbind(grouped_mean(., value, year)) %>% 
+#   ungroup() %>% 
+#   group_by(isoalpha3) %>% 
+#   arrange(isoalpha3, year) %>% 
+#   mutate(change_pp = value - lag(value)) %>% 
+#   filter(year == 2020) 
+# 
+# promedio_plots[[i]] <- ggfun_prom(promedio_list[[i]], promedio_list[[i]]$isoalpha3, promedio_list[[i]]$change_pp)
+# 
+# }
+
+##### Evolución 
+
+# evolucion_list <-list()
+# 
+# evolucion_plots <-list()
+#  
+# 
+# for (i in names(vars)) {
+# 
+# evolucion_list[[i]] <- table %>% 
+#   left_join(paises) %>% 
+#   select(isoalpha3, region_bid, year, i)
+#   
+# 
+# evolucion_plots[[i]] <- ggfun_evo(evolucion_list[[i]], evolucion_list[[i]]$year, evolucion_list[[i]]$i)
+# 
+# }
+
+
+# ##### Categoria una
+# 
+# categoria_list <-list()
+# 
+# categoria_plots <-list()
+# 
+# for (i in names(vars)) {
+# 
+# categoria_list[[i]] <- query_indicator(indicator = i, 
+#                                        categories = 'area',
+#                                        countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA',
+#                                        categories = 'age') %>% 
+#   mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
+#                           year == 2018 & isoalpha3 == "MEX" ~2019, 
+#                           TRUE ~ year)) %>% 
+#   rbind(grouped_mean(., value, area, year)) %>% 
+#   ungroup() %>% 
+#   group_by(isoalpha3, area) %>% 
+#   arrange(isoalpha3, year) %>% 
+#   mutate(change_pp = value - lag(value)) %>% 
+#   filter(year == 2020) 
+# 
+# categoria_plots[[i]] <- ggfun_one(categoria_list[[i]], categoria_list[[i]]$isoalpha3, categoria_list[[i]]$change_pp, categoria_list[[i]]$area)
+# 
+# }
+
+
+```
+
+En primer lugar, como resumen se presenta la siguiente tabla que contiene los indicadores analizados en esta sección. 
+
+Table \@ref(fig:eduTab): Tabla de indicadores de educación
+
+```{r eduTab, fig.cap="Source: SCLData", echo=FALSE, warning=FALSE, show_col_types = FALSE}
+
+  table %>% 
+  DT::datatable(., rownames = FALSE, 
+                filter = 'top', 
+                width = 750, 
+                options = list(pageLength = 15,
+                                scrollX = TRUE,
+                                searching = TRUE,
+                                lengthMenu = c(10,20,30,40,50),
+                                columnDefs = list(list(className = 'dt-center', targets = 0:5)))) %>% 
+   DT::formatRound(table = ., columns = c('Tasa neta de asistencia', 'Tasa sobreedad', 'Tasa terminación', 'Tasa abandono', 'Ninis', 'Tasa asistencia por edad'), digits = 2) %>%
+   DT::formatStyle(0:5,color = '#002126')
+
+
+```
+
+## Asistencia por edad 
+
+Tasa de asistencia escolar por grupo de edad
+
+## Asistencia neta 
+
+Tasa neta de asistencia escolar. (tasa_neta_asis)
+
+## Ninis
+
+Proporción de jóvenes que no estudian ni trabajan. (Ninis_2)
+
+## Tasa de abandono
+
+Tasa de abandono escolar temprano. (leavers)
+
+## Tasa de sobreedad
+
+Proporción de alumnos cuya edad está por encima de las esperadas técnicamente para el año que están cursando .(tasa_sobre_edad)
+

@@ -1,0 +1,5 @@
+delete_merged_file: true
+before_chapter_script: ["Indicadores funciones.R"]
+language:
+  ui:
+    chapter_name: " "
