@@ -35,3 +35,9 @@ pensionistas
 diversidad
 población-afro-e-indígena
 referencias
+total
+quintil-i
+quintil-ii
+quintil-iii
+quintil-iv
+quintil-v

@@ -51,6 +51,72 @@ promedio_list <-list()
 
 promedio_plots <-list()
 
+# tasa asis edad: esta se hace por separado porque es la única que tiene los datos así. pero un for para quintil
+
+grupo_asis_prom <- query_indicator(indicator = 'tasa_asis_edad', 
+                                   countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA',
+                                   categories = 'age,quintile', 
+                                   yearstart = 2010, 
+                                   yearend = 2020) %>% 
+  mutate(year = case_when(isoalpha3 == "CHL" & year == 2017 ~ 2019,
+                          isoalpha3 == "MEX" & year == 2018 ~ 2019,
+                          TRUE ~ year))
+
+promedio_sin <- grupo_asis_prom %>% 
+  group_by(isoalpha3, year, quintile) %>% 
+  mutate(value = mean(value), 
+         age = "Promedio", 
+         sample = NA_character_, 
+         cv = NA_character_, 
+         se = NA_character_) %>% 
+  distinct()
+
+dat <- grupo_asis_prom %>% 
+  rbind(promedio_sin) 
+
+data_fin <- list()
+
+asis_graph <- list()
+
+asis_graph_col <- list()
+
+aux_quin <- promedio_sin %>% 
+  ungroup() %>% 
+  select(quintile) %>% 
+  distinct() 
+
+asis_quin <- set_names(aux_quin$quintile)
+
+data_fin1 <- dat %>% 
+  rbind(grouped_mean(dat, value, year, age, quintile)) %>% 
+  ungroup() %>% 
+  group_by(isoalpha3, age, quintile) %>% 
+  arrange(isoalpha3, age, year, quintile) %>% 
+  mutate(change_pp = value - lag(value)) %>% 
+  filter(year == 2020) 
+
+for(i in names(asis_quin)) {
+  
+data_fin[[i]] <- data_fin1 %>% 
+   filter(quintile == i) 
+  
+asis_graph[[i]] <- data_fin[[i]] %>% 
+  filter(age == "Promedio") %>% 
+  ggplot(aes(x = fct_reorder(isoalpha3, change_pp))) +
+  geom_col(aes(y = change_pp), alpha = 0.7, show.legend = FALSE, fill = '#0F6FC6') +
+  geom_point(data_fin[[i]], mapping = aes(y = change_pp, color = age), size = 4) +
+  geom_text(data = data_fin[[i]] %>% 
+              filter(age == "Promedio"),
+            aes(y =  change_pp +.02, label = comma(change_pp, accuracy = 0.1)),
+            family = 'Century Gothic', fontface = "bold") +
+  geom_label(data = data_fin[[i]],
+             aes(y =  5.7, label = comma(value, accuracy = 0.1)),
+             family = 'Century Gothic', fontface = "bold")
+  
+
+asis_graph_col[[i]] <- ggfun_mul(asis_graph[[i]], data_fin1)
+}
+
 consulta <- scldataR::scldata_dict %>% 
   select(collection, indicator, label_es) %>% 
   filter(indicator == 'tasa_asis_edad' |indicator == 'leavers'| indicator == 'Ninis_2')
@@ -152,7 +218,52 @@ Table \@ref(fig:eduTab): Tabla de indicadores de educación
 
 ## Asistencia por edad 
 
-Tasa de asistencia escolar por grupo de edad
+Tasa de asistencia escolar por grupo de edad por quintil. Aquí deben de ir botones por cada quintil. 
+
+### Total
+
+```{r asis_tot, results='asis', echo=FALSE}
+
+print(asis_graph_col$Total)
+
+```
+
+### Quintil I
+
+```{r asis_1, results='asis', echo=FALSE}
+
+print(asis_graph_col$quintile_1)
+
+```
+
+### Quintil II
+
+```{r asis_2, results='asis', echo=FALSE}
+
+print(asis_graph_col$quintile_2)
+
+```
+
+### Quintil III
+```{r asis_3, results='asis', echo=FALSE}
+
+print(asis_graph_col$quintile_3)
+
+```
+
+### Quintil IV
+```{r asis_4, results='asis', echo=FALSE}
+
+print(asis_graph_col$quintile_4)
+
+```
+
+### Quintil V
+```{r asis_5, results='asis', echo=FALSE}
+
+print(asis_graph_col$quintile_5)
+
+```
 
 ## Asistencia neta 
 
