@@ -1,9 +1,0 @@
-book_filename: "Evaluacion-indicadores-COVID"
-chapter_name: "Sección "
-repo: https://github.com/BID-DATA/evaluacion-indicadores-covid.git
-output_dir: "docs""
-new_session: yes
-
-
-delete_merged_file: true
-before_chapter_script: ["Indicadores funciones.R"]

@@ -147,10 +147,9 @@ ggp_one <- ggplot(dat, aes(x = fct_reorder(x.var, y.var),  fill = nivel)) +
 
 ##### Cambios por edad  y promedio #####
 
-ggfun_mul <- function(ggplot, dat){
+ggfun_mul <- function(ggplot, data){
   
 ggp_mul<- ggplot +
-  labs(title = str_wrap(dat$label_es, 50), y = dat$valuetype) +
     theme(legend.position="right",
           axis.title.y = element_text(color = "#000f1c", face = "bold", family = 'Century Gothic'),
           axis.title.x = element_blank(),

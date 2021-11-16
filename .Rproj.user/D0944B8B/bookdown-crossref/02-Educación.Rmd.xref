@@ -1,6 +1,12 @@
 h1:cross Educación
 fig:eduTab Source: SCLData
 h2:asistencia-por-edad Asistencia por edad
+h3:total Total
+h3:quintil-i Quintil I
+h3:quintil-ii Quintil II
+h3:quintil-iii Quintil III
+h3:quintil-iv Quintil IV
+h3:quintil-v Quintil V
 h2:asistencia-neta Asistencia neta
 h2:ninis Ninis
 h2:tasa-de-abandono Tasa de abandono
