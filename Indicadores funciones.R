@@ -34,16 +34,24 @@ countries_color_prom <- c("ARG"= "#17406D", "BOL" = "#17406D","CHL" = "#17406D",
 
 # agregar región BID
 
+isoalpha3 <- c("Promedio", "JAM", "SUR", "BHS")
+country_name_en <- c("Promedio", "Jamaica", "Suriname", "Bahamas")
+region_bid <- c("Promedio", "Caribe", "Caribe", "Caribe")
+
+prom <- data.frame(isoalpha3, country_name_en, region_bid)
+
 paises <- query_indicator(indicator = 'pobreza', 
                           yearstart = 2019, 
                           yearend =  2020) %>% 
-  select(isoalpha3) %>% 
+  select(isoalpha3, country_name_en) %>% 
   distinct() %>% 
   mutate(region_bid = case_when(isoalpha3 %in% c("ARG", "BRA", "PRY", "CHL", "URY") ~ "Cono Sur", 
                                 isoalpha3 %in% c("BOL", "COL", "ECU", "PER", "VEN") ~ "Grupo Andino", 
                                 isoalpha3 %in% c("BHS", "BRB", "GUY", "JAM", "SUR", "TTO") ~ "Caribe", 
                                 isoalpha3 %in% c("HTI", "MEX", "PAN", "DOM", "BEL", "CRI", "SLV", "GTM", "HND", "NIC") ~ "Centroamerica", 
-                                TRUE ~ "NO"))
+                                TRUE ~ "NO")) %>% 
+  rbind(prom)
+  
 
 colors_regiones <- sample(colors_pal, 5, replace = FALSE)
 
@@ -56,8 +64,8 @@ grouped_mean <- function(.data, .summary_var, ...) {
     group_by(...) %>%
     mutate(value = mean(!!.summary_var)) %>% 
     mutate(isoalpha3 = "Promedio", 
-           country_name_en = "Average", 
-           country_name_es = "Promedio", 
+           country_name_en = "Promedio", 
+           country_name_es = "Average", 
            source = "scldata", 
            se = NA_character_, 
            cv = NA_character_, 
@@ -100,7 +108,7 @@ ggfun_evo <- function(dat, x.var, y.var){
                                     color = region_bid)) +
     geom_line(size=2)+
     facet_wrap(~isoalpha3, scales = 'free_y') +
-   # labs(title = str_wrap(dat$label_es, 50), y = dat$valuetype) +
+    #labs(title = str_wrap(dat$label_es, 50), y = dat$valuetype) +
     theme(legend.position="bottom", 
           axis.title.y = element_text(color = "#000f1c", face = "bold", family = 'Century Gothic'),
           axis.title.x = element_blank(), 

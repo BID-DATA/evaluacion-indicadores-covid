@@ -41,3 +41,16 @@ quintil-ii
 quintil-iii
 quintil-iv
 quintil-v
+evolución
+por-nivel-de-ingreso-total
+evolución-1
+evolución-2
+evolución-3
+evolución-4
+cambio-promedio
+cambio-promedio-1
+cambio-promedio-2
+cambio-promedio-3
+cambio-promedio-4
+evolución-5
+cambio-promedio-5
