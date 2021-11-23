@@ -87,6 +87,7 @@ table <- query_indicator(indicator = 'pobreza,vulnerable,ginihh,indexrem') %>%
       rbind(grouped_mean(., value, indicator, year)) %>% 
       ungroup() %>% 
   select(country_name_es, year, indicator, value) %>% 
+  mutate(value = round(value, 2)) %>% 
   spread(indicator, value) %>% 
   rename_all(funs(c('País', 'Año', 'Gini', 'Remesas', 'Población en pobreza', 'Población vulnerable'))) 
 
@@ -105,9 +106,10 @@ Table \@ref(fig:pobTab): Tabla de indicadores pobreza y protección social
                 options = list(pageLength = 20,
                                 scrollX = TRUE,
                                 searching = TRUE,
+                                searchHighlight = TRUE, 
                                 lengthMenu = c(10,20,30,40,50),
                                 columnDefs = list(list(className = 'dt-center', targets = 0:5)))) %>% 
-   DT::formatRound(table = ., columns = c('Gini', 'Remesas', 'Población en pobreza', 'Población vulnerable'), digits = 2) %>%
+   DT::formatRound(table = ., columns = c('Gini', 'Remesas', 'Población en pobreza', 'Población vulnerable'), digits = 2, interval = 2) %>%
    DT::formatStyle(0:5,color = '#002126')
 
 
@@ -131,7 +133,7 @@ print(promedio_plots$pobreza)
 
 ```
 
-### Por area 
+### Por área 
 
 ```{r pob area, results='asis', echo=FALSE}
 
@@ -157,7 +159,7 @@ print(promedio_plots$vulnerable)
 
 ```
 
-### Por area 
+### Por área 
 
 ```{r vul area, results='asis', echo=FALSE}
 
@@ -183,7 +185,7 @@ print(promedio_plots$ginihh)
 
 ```
 
-### Por area 
+### Por área 
 
 ```{r gin area, results='asis', echo=FALSE}
 
@@ -209,7 +211,7 @@ print(promedio_plots$indexrem)
 
 ```
 
-### Por area 
+### Por área 
 
 ```{r rem area, results='asis', echo=FALSE}
 

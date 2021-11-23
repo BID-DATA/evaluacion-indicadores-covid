@@ -46,6 +46,7 @@ table <- query_indicator(indicator = 'tasa_neta_asis,tasa_sobre_edad,tasa_termin
       ungroup() %>% 
   select(country_name_en,  year, indicator, value) %>% 
   ungroup() %>% 
+  mutate(value = round(value, 2)) %>% 
   spread(indicator, value) %>% 
   left_join(table2) %>% 
   rename_all(funs(c('País', 'Año', 'Tasa neta de asistencia', 'Tasa sobreedad', 'Tasa terminación', 'Tasa abandono', 'Ninis', 'Tasa asistencia por edad'))) 
