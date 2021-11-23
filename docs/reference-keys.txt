@@ -54,3 +54,8 @@ cambio-promedio-3
 cambio-promedio-4
 evolución-5
 cambio-promedio-5
+tasa-de-terminación
+por-área
+por-área-1
+por-área-2
+por-área-3
