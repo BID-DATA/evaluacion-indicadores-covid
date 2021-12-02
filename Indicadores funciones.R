@@ -30,7 +30,8 @@ countries_color <- sample(colors_pal, 12, replace = FALSE)
 countries_color_prom <- c("ARG"= "#17406D", "BOL" = "#17406D","CHL" = "#17406D",
                           "COL" = "#17406D", "CRI" = "#17406D", "ECU" = "#17406D",
                           "MEX" = "#17406D", "PER" = "#17406D", "PRY" = "#17406D", 
-                          "SLV" = "#17406D", "Promedio" = "#009DD9", "BRA" = "#17406D")
+                          "SLV" = "#17406D", "Promedio" = "#009DD9", "BRA" = "#17406D", 
+                          "URY" = "#17406D")
 
 # agregar región BID
 
@@ -41,7 +42,7 @@ region_bid <- c("Promedio", "Caribe", "Caribe", "Caribe")
 prom <- data.frame(isoalpha3, country_name_en, region_bid)
 
 paises <- query_indicator(indicator = 'pobreza', 
-                          yearstart = 2019, 
+                          yearstart = 2006, 
                           yearend =  2020) %>% 
   select(isoalpha3, country_name_en) %>% 
   distinct() %>% 
@@ -108,7 +109,7 @@ ggfun_evo <- function(dat, x.var, y.var){
                                     color = region_bid)) +
     geom_line(size=2)+
     facet_wrap(~isoalpha3, scales = 'free_y') +
-    #labs(title = str_wrap(dat$label_es, 50), y = dat$valuetype) +
+    labs(title = str_wrap(dat$label_es, 50), y = dat$valuetype) +
     theme(legend.position="bottom", 
           axis.title.y = element_text(color = "#000f1c", face = "bold", family = 'Century Gothic'),
           axis.title.x = element_blank(), 

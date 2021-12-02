@@ -1,6 +1,6 @@
-# Pobreza y protección social
+# Pobreza
 
-En esta sección se consideran los indicadores de porcentaje de la población viviendo en pobreza, con vulnerabilidad, recibiendo remesas, así como el coeficiente de Gini. 
+En esta sección se consideran los indicadores de porcentaje de la población viviendo en pobreza, con vulnerabilidad, recibiendo remesas, así como el coeficiente de Gini, con el objetivo de evaluar en alguna medida como se afectó a la población más vulnerable durante la pandemia del COVID-19. 
 
 ```{r indicadores graficas, include=FALSE}
 
@@ -22,7 +22,7 @@ vars <- set_names(consulta$indicator)
 for (i in names(vars)) {
 
 promedio_list[[i]] <- query_indicator(indicator = i, 
-                                      countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA') %>% 
+                                      countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA,URY') %>% 
   mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
                           year == 2018 & isoalpha3 == "MEX" ~2019, 
                           TRUE ~ year)) %>% 
@@ -30,7 +30,7 @@ promedio_list[[i]] <- query_indicator(indicator = i,
   ungroup() %>% 
   group_by(isoalpha3) %>% 
   arrange(isoalpha3, year) %>% 
-  mutate(change_pp = value - lag(value)) %>% 
+   mutate(change_pp = value - lag(value)) %>% 
   filter(year == 2020) 
 
 promedio_plots[[i]] <- ggfun_prom(promedio_list[[i]], promedio_list[[i]]$isoalpha3, promedio_list[[i]]$change_pp)
@@ -45,16 +45,34 @@ evolucion_plots <-list()
 
 for (i in names(vars)) {
 
-evolucion_list[[i]] <- query_indicator(indicator = i, 
-                                      countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA') %>% 
+evolucion_list[[i]] <- query_indicator(indicator = i, yearend = 2020, 
+                                       countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA,URY') %>% 
   mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
                           year == 2018 & isoalpha3 == "MEX" ~2019, 
                           TRUE ~ year)) %>% 
+  rbind(grouped_mean(., value, year)) %>% 
   left_join(paises)
 
 evolucion_plots[[i]] <- ggfun_evo(evolucion_list[[i]], evolucion_list[[i]]$year, evolucion_list[[i]]$value)
 
 }
+
+##### Gini prom 
+
+promedio_gini <- query_indicator(indicator = 'ginihh', 
+                                      countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA,URY') %>% 
+  mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
+                          year == 2018 & isoalpha3 == "MEX" ~2019, 
+                          TRUE ~ year)) %>% 
+  rbind(grouped_mean(., value, year)) %>% 
+  ungroup() %>% 
+  group_by(isoalpha3) %>% 
+  arrange(isoalpha3, year) %>% 
+  mutate(value = value,
+    change_pp = (((value/lag(value)-1)*100))) %>% 
+  filter(year == 2020)
+
+promedio_gini_plot <-  ggfun_prom(promedio_gini, promedio_gini$isoalpha3, promedio_gini$change_pp)
 
 ##### Categoria una
 
@@ -66,7 +84,7 @@ for (i in names(vars)) {
 
 categoria_list[[i]] <- query_indicator(indicator = i, 
                                        categories = 'area',
-                                       countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA') %>% 
+                                       countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA,URY') %>% 
   mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
                           year == 2018 & isoalpha3 == "MEX" ~2019, 
                           TRUE ~ year)) %>% 
@@ -80,6 +98,23 @@ categoria_list[[i]] <- query_indicator(indicator = i,
 categoria_plots[[i]] <- ggfun_one(categoria_list[[i]], categoria_list[[i]]$isoalpha3, categoria_list[[i]]$change_pp, categoria_list[[i]]$area)
 
 }
+#### Categoria una Gini
+
+categoria_gini<- query_indicator(indicator = 'ginihh', 
+                                       categories = 'area',
+                                       countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA,URY') %>% 
+  mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
+                          year == 2018 & isoalpha3 == "MEX" ~2019, 
+                          TRUE ~ year)) %>% 
+  rbind(grouped_mean(., value, area, year)) %>% 
+  ungroup() %>% 
+  group_by(isoalpha3, area) %>% 
+  arrange(isoalpha3, year) %>% 
+  mutate(change_pp = (((value/lag(value)-1)*100))) %>% 
+  filter(year == 2020) 
+
+categoria_plots_gini <- ggfun_one(categoria_gini, categoria_gini$isoalpha3, categoria_gini$change_pp, categoria_gini$area)
+
 
 #### Table 
 
@@ -93,11 +128,11 @@ table <- query_indicator(indicator = 'pobreza,vulnerable,ginihh,indexrem') %>%
 
 ```
 
-Como análisis general se presenta un overview de los indicadores cubiertos en esta sección para los años para los que se cuenta información. En contraste con el resto de la sección, este resumen general se presenta para todos los paises, y no únicamente para los que tienen datos en 2020.
+En primer lugar, como análisis general se presenta un resumen de los indicadores cubiertos en esta sección para los años para los que se cuenta información. Este resumen general se presenta para todos los países desde el año 2006 para los que se tiene información, a diferencia del resto de la sección que únicamente considera a los países para los que se tiene información en 2020.
 
-Table \@ref(fig:pobTab): Tabla de indicadores pobreza y protección social
+Table \@ref(fig:pobTab): Tabla de indicadores pobreza 
 
-```{r pobTab, fig.cap="A table", echo=FALSE, warning=FALSE, show_col_types = FALSE}
+```{r pobTab, fig.cap="SCLData", echo=FALSE, warning=FALSE, show_col_types = FALSE}
 
   table %>% 
   DT::datatable(., rownames = FALSE, 
@@ -117,25 +152,25 @@ Table \@ref(fig:pobTab): Tabla de indicadores pobreza y protección social
 
 ## Pobreza
 
-### Evolucion
+En primer lugar, la tasa de pobreza, medida como el porcentaje de la población cuyo ingreso per cápita al día es menor de $5 US, parece haber sufrido un incremento considerable a raíz de la pandemia en muchos países. Destacan Perú, Ecuador y Argentina.
 
-```{r pob-evo, results='asis', echo=FALSE}
+```{r pob-evo, results='asis', echo=FALSE, warning=FALSE, fig.cap="Evolución de la tasa de pobreza", fig.height=8, fig.width=10}
 
 print(evolucion_plots$pobreza)
 
 ```
 
-### Cambios promedio
+Esto se puede observar con mayor detalle en el cambio promedio que experimentó este indicador entre 2019 y 2020. En promedio, en la región la pobreza incrementó en 4.8 puntos porcentuales. Perú fue el país con más aumento con un cambio de 25.5 puntos porcentuales entre 2019 y 2020, seguido de Costa Rica que tuvo un aumento de 8.6 puntos porcentuales en la tasa de pobreza entre 2019 y 2020. Todos los países de la región para los que se tiene información experimentaron un aumento en la tasa de pobreza con excepción de Brasil, Uruguay y Paraguay.
 
-```{r pob, results='asis', echo=FALSE}
+```{r pob, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio en la tasa de pobreza"}
 
 print(promedio_plots$pobreza)
 
 ```
 
-### Por área 
+Considerando el cambio por zona de residencia, en promedio la pobreza aumentó en mayor medida en la zona rural con un cambio de 5.8 puntos porcentuales entre 2019 y 2020.
 
-```{r pob area, results='asis', echo=FALSE}
+```{r pob-area, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio en la tasa de pobreza por zona"}
 
 print(categoria_plots$pobreza)
 
@@ -143,77 +178,78 @@ print(categoria_plots$pobreza)
 
 ## Vulnerable
 
-### Evolucion
+Adicionalmente, es importante analizar la afectación en la población que se considera como vulnerable. Particularmente, se considera como población vulnerable a aquella que tiene un ingreso per cápita diario entre $5 US y $12.4 US. En este caso en la evolución se puede observar que hay resultados mixtos para los países que tienen información para 2020.
 
-```{r vul evo, results='asis', echo=FALSE}
+```{r vul-evo, results='asis', echo=FALSE, warning=FALSE, fig.cap="Evolución de la tasa de población vulnerable", fig.height=8, fig.width=10}
 
-print(evolucion_plots$pobreza)
+print(evolucion_plots$vulnerable)
 
 ```
 
-### Cambios promedio
+Considerando el cambio entre 2019 y 2020, la población vulnerable disminuyó en 1.3 puntos porcentuales. Perú es el país con mayor cambio con una disminución de 8.6 puntos porcentuales. Aquí es relevante mencionar que parte de la disminución en la población vulnerable refleja el aumento de la población en pobreza, por lo que la caída de este indicador no necesariamente es algo positivo.
 
-```{r vul, results='asis', echo=FALSE}
+```{r vul, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio en la tasa de población vulnerable"}
 
 print(promedio_plots$vulnerable)
 
 ```
 
-### Por área 
+Por zona de residencia la caída en la población vulnerable fue más evidente en la zona urbana.
 
-```{r vul area, results='asis', echo=FALSE}
+```{r vul-area, results='asis', echo=FALSE,  warning=FALSE, fig.cap="Cambio en la tasa de población vulnerable"}
 
 print(categoria_plots$vulnerable)
 
 ```
 
-## Gini
+## Desigualdad
 
-### Evolucion
+Otro indicador relevante para entender el cambio sufrido por la población es la desigualdad. Esta se mide con el indicador de Gini que es el método más utilizado para medir la desigualdad salarial. El Gini toma un valor de 0 cuando la población estudiada presenta igualdad absoluta, y el valor de 1 cuando las personas viven en condición de máxima desigualdad.  
+En este indicador también se observan resultados mixtos, aunque en muchos casos se puede ver un incremento del coeficiente de Gini, lo que señala un aumento en la desigualdad de los países de la región. 
 
-```{r gini evo, results='asis', echo=FALSE}
+```{r gini-evo, results='asis', echo=FALSE, warning=FALSE, fig.cap="Evolución del Gini", fig.height=8, fig.width=10}
 
 print(evolucion_plots$gini)
 
 ```
 
-### Cambios promedio
+Dado que el coeficiente de Gini se expresa del 0 al 1 en este caso el cambio entre 2019 y 2020 se expresa en cambio porcentual. En promedio, el coeficiente de Gini aumentó en 4.8% etre 2019 y 2020. El país que experimentó un incremento mayor fue Perú cuyo coeficiente de Gini aumentó en 17.9%, seguido de El Salvador con un cambio de 12.7%. 
 
-```{r gin prom, results='asis', echo=FALSE}
+```{r gin-prom, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio promedio del Gini"}
 
-print(promedio_plots$ginihh)
-
-```
-
-### Por área 
-
-```{r gin area, results='asis', echo=FALSE}
-
-print(categoria_plots$ginihh)
+print(promedio_gini_plot)
 
 ```
 
-## Remesas
 
-### Evolucion
+```{r gin-area, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio promedio del Gini por área"}
 
-```{r rem evo, results='asis', echo=FALSE}
+print(categoria_plots_gini)
+
+```
+
+## Porcentaje de hogares recibiendo remesas
+
+Las remesas son otro indicador importante para medir la situación para la población en condiciones vulnerables, ya que en Latinoamérica las remesas representan, en promedio, el 2.43% del PIB, siendo más relevantes como una fuente de ingreso adicional en hogares de deciles de ingreso más bajos. En este caso se mide el porcentaje de hogares que reporta haber recibido remesas del exterior, y la evolución muestra que en general las remesas de la región sufrieron una caída en 2020.
+
+
+```{r rem-evo, results='asis', echo=FALSE, warning=FALSE, fig.cap="Evolución del porcentaje de hogares que reciben remesas", fig.height=8, fig.width=10}
 
 print(evolucion_plots$indexrem)
 
 ```
 
-### Cambios promedio
+El país con la caída más pronunciada fue Costa Rica cuya disminución en remesas fue de 17.5 puntos porcentuales, seguida de El Salvador cuya caída fue de 3.4 puntos porcentuales. En este sentido es relevante mencionar que El Salvador es el país que recibe una mayor cantidad de remesas del extranjero. Particularmente, de acuerdo con información del Banco Mundial las remesas representaron el 24.1% del PIB de El Salvador en 2020.
 
-```{r rem prom, results='asis', echo=FALSE}
+```{r rem-prom, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio promedio de las remesas"}
 
 print(promedio_plots$indexrem)
 
 ```
 
-### Por área 
-
-```{r rem area, results='asis', echo=FALSE}
+Finalmente, la caída en las remesas por zona fue más pronunciada para las personas viviendo en una zona urbana, estas experimentaron un aumento del 6.2% en el coeficiente de Gini.
+ 
+```{r rem-area, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio promedio de las remesas por área"}
 
 print(categoria_plots$indexrem)
 
