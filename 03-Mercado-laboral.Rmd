@@ -2,40 +2,304 @@
 
 En esta sección se consideran los indicadores de mercado laboral 
 
-## Tasa de participación
+```{r indicadores graficas, include=FALSE}
 
-Tasa global de participación (tasa_participacion)
+source("Indicadores funciones.R")
 
+
+promedio_list <-list()
+
+promedio_plots <-list()
+
+consulta <- scldataR::scldata_dict %>% 
+  select(collection, indicator, label_es) %>% 
+  filter(indicator == 'tasa_participacion' | indicator == 'tasa_ocupacion' | indicator == 'tasa_desocupacion'| indicator == 'ocup_suf_salario'
+         | indicator == 'dura_desempleo' | indicator == 'ingreso_mens_prom' | indicator == 'inglaboral_formales' | indicator == 'inglaboral_informales')
+
+consulta_pct <- scldataR::scldata_dict %>% 
+  select(collection, indicator, label_es) %>% 
+  filter(indicator == 'tasa_participacion' | indicator == 'tasa_ocupacion' | indicator == 'tasa_desocupacion'| indicator == 'ocup_suf_salario'
+         | indicator == 'dura_desempleo')
+
+consulta_lev <- scldataR::scldata_dict %>% 
+  select(collection, indicator, label_es) %>% 
+  filter(indicator == 'dura_desempleo' | indicator == 'ingreso_mens_prom' | indicator == 'inglaboral_formales' | indicator == 'inglaboral_informales')
+
+vars <- set_names(consulta$indicator)
+
+vars_pct <- set_names(consulta_pct$indicator)
+
+vars_lev <- set_names(consulta_lev$indicator)
+
+##### Promedios porc
+
+for (i in names(vars)) {
+
+promedio_list[[i]] <- query_indicator(indicator = i, 
+                                      countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA,URY') %>% 
+  mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
+                          year == 2018 & isoalpha3 == "MEX" ~2019, 
+                          TRUE ~ year)) %>% 
+  rbind(grouped_mean(., value, year)) %>% 
+  ungroup() %>% 
+  group_by(isoalpha3) %>% 
+  arrange(isoalpha3, year) %>% 
+  mutate(change_pp = value - lag(value)) %>% 
+  filter(year == 2020) 
+
+promedio_plots[[i]] <- ggfun_prom(promedio_list[[i]], promedio_list[[i]]$isoalpha3, promedio_list[[i]]$change_pp)
+
+}
+
+
+promedio_list_lev <-list()
+
+promedio_plots_lev <-list() 
+
+##### Promedios lev
+
+for (i in names(vars_lev)) {
+
+promedio_list_lev[[i]] <- query_indicator(indicator = i, 
+                                      countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA,URY') %>% 
+  mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
+                          year == 2018 & isoalpha3 == "MEX" ~2019, 
+                          TRUE ~ year)) %>% 
+  rbind(grouped_mean(., value, year)) %>% 
+  ungroup() %>% 
+  group_by(isoalpha3) %>% 
+  arrange(isoalpha3, year) %>% 
+  mutate(change_pp = ((value/lag(value))-1)*100) %>% 
+  filter(year == 2020) 
+
+promedio_plots_lev[[i]] <- ggfun_prom(promedio_list_lev[[i]], promedio_list_lev[[i]]$isoalpha3, promedio_list_lev[[i]]$change_pp)
+
+}
+
+##### Evolución 
+
+evolucion_list <-list()
+
+evolucion_plots <-list()
+
+for (i in names(vars_pct)) {
+
+evolucion_list[[i]] <- query_indicator(indicator = i, 
+                                       countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA,URY') %>% 
+  mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
+                          year == 2018 & isoalpha3 == "MEX" ~2019, 
+                          TRUE ~ year)) %>% 
+  rbind(grouped_mean(., value, year)) %>% 
+  left_join(paises)
+
+evolucion_plots[[i]] <- ggfun_evo(evolucion_list[[i]], evolucion_list[[i]]$year, evolucion_list[[i]]$value)
+
+}
+
+##### Categoría una pct
+
+categoria_list <-list()
+
+categoria_plots <-list()
+
+for (i in names(vars_pct)) {
+
+categoria_list[[i]] <- query_indicator(indicator = i, 
+                                       categories = 'sex',
+                                       countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA,URY') %>% 
+  mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
+                          year == 2018 & isoalpha3 == "MEX" ~2019, 
+                          TRUE ~ year)) %>% 
+  rbind(grouped_mean(., value, sex, year)) %>% 
+  ungroup() %>% 
+  group_by(isoalpha3, sex) %>% 
+  arrange(isoalpha3, year) %>% 
+  mutate(change_pp = value - lag(value)) %>% 
+  filter(year == 2020) 
+
+categoria_plots[[i]] <- ggfun_one(categoria_list[[i]], categoria_list[[i]]$isoalpha3, categoria_list[[i]]$change_pp, categoria_list[[i]]$sex)
+
+}
+
+#### Table 
+
+table <- query_indicator(indicator = 'tasa_participacion,tasa_ocupacion,tasa_desocupacion,ocup_suf_salario,dura_desempleo') %>% 
+      rbind(grouped_mean(., value, indicator, year)) %>% 
+      ungroup() %>% 
+  select(country_name_es, year, indicator, value) %>% 
+  mutate(value = round(value, 2)) %>% 
+  spread(indicator, value) %>% 
+  rename_all(funs(c('País', 'Año', 'Tasa de participación', 'Tasa de ocupación', 'Tasa desocupación', 'Población salario lab suficiente', 'duración desempleo'))) 
+
+```
+En esta sección se consideran los indicadores de tasa de participación, tasa de ocupación, porcentaje de población viviendo con salario suficiente y  cambio en el ingreso laboral para trabajadores formales e informales. 
+
+En primer lugar, como análisis general se presenta una tabla resumen de los indicadores laborales que serán analizados en esta sección, con excepción de los datos de ingreso que se ilustran más adelante. Este resumen general se presenta para todos los países y años de los que se tiene información, y no únicamente para los que tienen datos en 2020. 
+
+Tabla \@ref(fig:merTab) Indicadores de mercado laboral
+
+```{r merTab, fig.cap="Fuente SCLData", echo=FALSE, warning=FALSE, show_col_types = FALSE}
+
+  table %>% 
+  DT::datatable(., rownames = FALSE, 
+                filter = 'top', 
+                width = 825, 
+                options = list(pageLength = 20,
+                                scrollX = TRUE,
+                                searching = TRUE,
+                                searchHighlight = TRUE, 
+                                lengthMenu = c(10,20,30,40,50),
+                                columnDefs = list(list(className = 'dt-center', targets = 0:5)))) %>% 
+   DT::formatRound(table = ., columns = c('Tasa de participación', 'Tasa de ocupación', 'Tasa desocupación', 'Población salario lab suficiente', 'duración desempleo'), digits = 2, interval = 2) %>%
+   DT::formatStyle(0:5,color = '#002126')
+
+
+```
 ## Tasa de ocupación 
 
-(tasa_ocupacion)
+
+En primer lugar se analiza la tasa de ocupación y su cambio en 2020. Este indicador se refiere a las personas ocupadas entre las personas en edad de trabajar. Este indicador tuvo afectaciones fuertes generadas por la pandemia del COVID-19. Considerando la evolución en la siguiente gráfica (\@ref(fig:evo-ocu)) se puede observar que, en promedio, la región tuvo una caída importante en ocupación. 
+
+
+```{r evo-ocu, fig.cap="Evolución de la tasa de ocupación", echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
+
+
+plot(evolucion_plots$tasa_ocupacion)
+
+
+```
+
+Observando únicamente el cambio entre 2020 y 2019 en la Gráfica \@ref(fig:camb-ocu) la diferencia es más clara. El país con una mayor caída en la tasa de ocupación fue Perú con una disminución de 10.2 puntos porcentuales, seguido por Costa Rica con una caída de 7.9 puntos porcentuales. En promedio, la región sufrió una disminución de 4.2 puntos porcentuales en la tasa de ocupación.
+
+```{r camb-ocu, fig.cap="Cambio en la tasa de ocupación", echo=FALSE, warning=FALSE}
+
+print(promedio_plots$tasa_ocupacion)
+
+
+```
+
+Considerando este indicador por género en se observa que la caída en la ocupación fue prácticamente igual con una disminución de 4.3 para los hombres y 4.1 para las mujeres. No obstante, es relevante mencionar que el porcentaje de ocupación es mayor para los hombres (62.2%) que para las mujeres (42.1%) por lo que proporcionalmente la caída es mayor para las mujeres. 
+
+```{r cat-ocu, fig.cap="Cambio en la tasa de ocupación por género", echo=FALSE, warning=FALSE}
+
+print(categoria_plots$tasa_ocupacion)
+
+
+```
 
 ## Tasa desocupación 
 
-(tasa_desocupacion)
+La tasa de desocupación se construye como la división del número de personas desocupadas, es decir que no tienen un trabajo y lo están buscando activamente, y el número de personas en edad de trabajar. Considerando la evolución se observa que en promedio parece haber habido un aumento relevante en la desocupación en 2020, con una recuperación para 2021.
+
+```{r evo-des, fig.cap="Evolución de tasa de desocupación", echo=FALSE, warning=FALSE , fig.height=8, fig.width=10}
+
+print(evolucion_plots$tasa_desocupacion)
+
+
+```
+
+Con los datos de cambios entre las cifras de 2019 y 2020 se observa que en promedio el aumento de la población desocupada fue de 3.0 puntos porcentuales. El país con el mayor cambio fue Costa Rica con un aumento de 8.2 puntos porcentuales en la población desocupada. En contraste, Ecuador fue el país con el menor cambio con un aumento de 0.7 puntos porcentuales entre la cifra de población desocupada en 2019 y 2020. 
+
+```{r camb-des, fig.cap="Cambio en la tasa de desocupación", echo=FALSE, warning=FALSE}
+
+print(promedio_plots$tasa_desocupacion)
+
+
+```
+
+Considerando este indicador por género se observa que el aumento en la desocupación fue mayor para las mujeres. Esto es relevante ya que muchos indicadores muestran que la pandemia afectó especialmente a la población femenina, que ya partía de una situación de desventaja en muchos entornos, incluido el mercado laboral. Será importante generar esfuerzos para incorporar a las mujeres a la fuerza laboral, especialmente después de la pandemia.
+
+```{r cat-des, fig.cap="Cambio en la tasa de desocupación por género", echo=FALSE, warning=FALSE}
+
+print(categoria_plots$tasa_desocupacion)
+
+
+```
+## Tasa de participación
+
+La tasa de participación es el porcentaje de personas económicamente activas entre las personas con edad de trabajar. Se considera como económicamente activas a las personas que tienen un trabajo, o lo están buscando activamente.
+
+Observando la evolución de esta serie algunos países presentan una caída considerable en el 2020. Este es el caso de Chile, Brasil, Argentina, Costa Rica y Perú.
+
+```{r evo-part, fig.cap="Evolución de tasa global de participación", echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
+
+print(evolucion_plots$tasa_participacion)
+
+
+```
+
+En efecto, observando el cambio en puntos porcentuales se puede ver que Perú fue el país cuya tasa de participación presentó una mayor caída con una disminución de 8.5 puntos porcentuales. De forma similar la caída para Brasil fue de 5.1 puntos porcentuales. En promedio, para los países de los que se tiene información la caída de 2019 a 2020 fue de 2.9 puntos porcentuales. 
+
+```{r camb-part, fig.cap="Cambio en la tasa global de participación", echo=FALSE, warning=FALSE}
+
+print(promedio_plots$tasa_participacion)
+
+
+```
+
+Observando el cambio por género se puede observar que, en promedio, la caída en participación fue la misma para hombres y mujeres. No obstante, considerando los dos países con una mayor disminución el cambio fue provocado mayormente por la caída en la participación de las mujeres. En este sentido es relevante destacar que la tasa de participación de las mujeres es significativamente más baja que la de los hombres. Específicamente, para 2020 la tasa de participación de las mujeres fue de 47.6% mientras que la de los hombres fue de 68.1%, por lo que, aún si la caída de la tasa fue similar en puntos porcentuales, la caída con relación a su valor es más alto para las mujeres.
+
+```{r cat-part, fig.cap="Cambio en la tasa global de participación por género", echo=FALSE, warning=FALSE}
+
+print(categoria_plots$tasa_participacion)
+
+
+```
 
 ## Salario suficiente
 
-Población ocupada en trabajos con salario suficiente (ocup_suf_salario)
+Además de las cifras de la población con y sin empleo también es relevante considerar qué sucedió con los ingresos de las personas que mantuvieron sus trabajos. Se sabe que la pandemia afectó a muchos trabajadores que sufrieron recortes en sus ingresos. En este sentido se analiza la evolución de la población que cuenta con un salario suficiente. Se considera como salario suficiente a las personas ocupadas que tienen un salario, ajustado por equivalencias, de US$1.95 o más por hora.
+
+La evolución de este indicador sugiere en promedio una disminución moderada de la población con salario suficiente. Asimismo, hay países en los que se observa un cambio más marcado como en Chile y Costa Rica.
+
+```{r evo-suf, fig.cap="Evolución de la población con salario suficiente", echo=FALSE, warning=FALSE, fig.height=8, fig.width=10}
+
+print(evolucion_plots$ocup_suf_salario)
+
+
+```
+
+Considerando los cambios entre 2019 y 2020 se observa que Chile tuvo una disminución de 54 puntos porcentuales en su población con salario suficiente. Este dato parece muy alto por lo que se revisará el proceso de armonización para descartar anomalías en este. Por otro lado, Perú presenta una disminución marcada de la población con salario suficiente. En contraste, Paraguay, El Salvador, Brasil y Bolivia muestran un incremento en las personas con salario suficiente.
+
+```{r camb-suf, fig.cap="Cambio de la población con salario suficiente", echo=FALSE, warning=FALSE}
+
+print(promedio_plots$ocup_suf_salario)
+
+
+```
+
+Por género los datos de este indicador son prácticamente idénticos por lo que no se presenta la gráfica implícitamente.
 
 ## Ingreso laboral: formales e informales
 
-Promedio de ingreso laboral monetario en el último mes (ingreso_mens_prom).
-Promedio de ingreso laboral formales (inglaboral_formales)
-Promedio de ingreso laboral informales (inglaboral_informales)
+Finalmente, en esta sección también es relevante analizar las diferencia en los salarios percibidos en el 2019 y 2020. En este caso únicamente se presentan las gráficas de cambios ya que el salario no está en unidades comparables entre países, por lo que el análisis en niveles no es el más directo. 
 
-## Duración desempleo
+En promedio se observó una disminución de 3.1% del salario mensual entre 2019 y 2020 en la región. El país con una disminución mayor fue Perú con una caída de 23.8% en el salario mensual, seguido por Ecuador que experimentó una caída del 10.8%. En contraste, Bolivia, Brasil, El Salvador y Chile parecen haber incrementado su salario mensual. Sin embargo, en este caso es relevante considerar que los datos de Chile tienen una revisión pendiente, sobre todo en cuanto a ingreso.
 
-Promedio de duración en el desempleo. (en meses) (dura_desempleo)
+```{r camb-ing, fig.cap="Cambio en el salario mensual", echo=FALSE, warning=FALSE}
 
-## Empleos sin remuneración
+print(promedio_plots_lev$ingreso_mens_prom)
 
-Personas ocupadas sin remuneración en porcentaje. (tasa_sinremuneracion)
 
-## Pensionistas
+```
 
-Personas de 65 o más que declaran un monto recibido. Contributiva y no contributiva. 
-(pensionista_65_mas) (pensionista_cont_65_mas)
+La caída fue más notoria para los trabajadores informales, dónde el salario disminuyó en promedio entre 2019 y 2020 en 5.9%, siendo otra vez Perú el país que experimentó una mayor caída. 
+
+```{r camb-ing-inf, fig.cap="Cambio en el salario mensual informales", echo=FALSE, warning=FALSE}
+
+print(promedio_plots_lev$inglaboral_informales)
+
+
+```
+
+En contraste, los trabajadores formales parecen haber incrementado su salario mensual en 1.1% entre 2019 y 2020, sobre todo influenciados por las cifras de Chile y Argentina que reportan un aumento importante. En la mayoría de los países el cambio en los trabajadores formales fue más modesto, y se puede ver que la pandemia tuvo consecuencias más notorias en el salario de la población informal que de por sí tenían condiciones más vulnerables. Esto señala la importancia de tomar medidas pertinentes en la región, aún más después de la pandemia.
+
+```{r camb-ing-for, fig.cap="Cambio en el salario mensual informales", echo=FALSE, warning=FALSE}
+
+print(promedio_plots_lev$inglaboral_formales)
+
+
+```
 
 
 

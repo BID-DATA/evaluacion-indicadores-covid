@@ -24,7 +24,7 @@
 <meta name="author" content="SCL Data" />
 
 
-<meta name="date" content="2021-11-13" />
+<meta name="date" content="2021-12-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -55,14 +55,17 @@
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
-<script src="libs/datatables-binding-0.19/datatables.js"></script>
-<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="libs/datatables-binding-0.20/datatables.js"></script>
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
 <link href="libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
 <script src="libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
 <link href="libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
 <script src="libs/selectize-0.12.0/selectize.min.js"></script>
+<link href="libs/dt-plugin-searchhighlight-1.11.3/source.css" rel="stylesheet" />
+<script src="libs/dt-plugin-searchhighlight-1.11.3/jquery.highlight.js"></script>
+<script src="libs/dt-plugin-searchhighlight-1.11.3/source.min.js"></script>
 <link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 
@@ -108,51 +111,54 @@ div.csl-indent {
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introducción</a></li>
-<li class="chapter" data-level="1" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html"><i class="fa fa-check"></i><b>1</b> Pobreza y protección social</a>
+<li class="chapter" data-level="1" data-path="pobreza.html"><a href="pobreza.html"><i class="fa fa-check"></i><b>1</b> Pobreza</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#pobreza"><i class="fa fa-check"></i><b>1.1</b> Pobreza</a>
-<ul>
-<li class="chapter" data-level="1.1.1" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#evolucion"><i class="fa fa-check"></i><b>1.1.1</b> Evolucion</a></li>
-<li class="chapter" data-level="1.1.2" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#cambios-promedio"><i class="fa fa-check"></i><b>1.1.2</b> Cambios promedio</a></li>
-<li class="chapter" data-level="1.1.3" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#por-area"><i class="fa fa-check"></i><b>1.1.3</b> Por area</a></li>
-</ul></li>
-<li class="chapter" data-level="1.2" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#vulnerable"><i class="fa fa-check"></i><b>1.2</b> Vulnerable</a>
-<ul>
-<li class="chapter" data-level="1.2.1" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#evolucion-1"><i class="fa fa-check"></i><b>1.2.1</b> Evolucion</a></li>
-<li class="chapter" data-level="1.2.2" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#cambios-promedio-1"><i class="fa fa-check"></i><b>1.2.2</b> Cambios promedio</a></li>
-<li class="chapter" data-level="1.2.3" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#por-area-1"><i class="fa fa-check"></i><b>1.2.3</b> Por area</a></li>
-</ul></li>
-<li class="chapter" data-level="1.3" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#gini"><i class="fa fa-check"></i><b>1.3</b> Gini</a>
-<ul>
-<li class="chapter" data-level="1.3.1" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#evolucion-2"><i class="fa fa-check"></i><b>1.3.1</b> Evolucion</a></li>
-<li class="chapter" data-level="1.3.2" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#cambios-promedio-2"><i class="fa fa-check"></i><b>1.3.2</b> Cambios promedio</a></li>
-<li class="chapter" data-level="1.3.3" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#por-area-2"><i class="fa fa-check"></i><b>1.3.3</b> Por area</a></li>
-</ul></li>
-<li class="chapter" data-level="1.4" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#remesas"><i class="fa fa-check"></i><b>1.4</b> Remesas</a>
-<ul>
-<li class="chapter" data-level="1.4.1" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#evolucion-3"><i class="fa fa-check"></i><b>1.4.1</b> Evolucion</a></li>
-<li class="chapter" data-level="1.4.2" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#cambios-promedio-3"><i class="fa fa-check"></i><b>1.4.2</b> Cambios promedio</a></li>
-<li class="chapter" data-level="1.4.3" data-path="pobreza-y-protección-social.html"><a href="pobreza-y-protección-social.html#por-area-3"><i class="fa fa-check"></i><b>1.4.3</b> Por area</a></li>
-</ul></li>
+<li class="chapter" data-level="1.1" data-path="pobreza.html"><a href="pobreza.html#pobreza-1"><i class="fa fa-check"></i><b>1.1</b> Pobreza</a></li>
+<li class="chapter" data-level="1.2" data-path="pobreza.html"><a href="pobreza.html#vulnerable"><i class="fa fa-check"></i><b>1.2</b> Vulnerable</a></li>
+<li class="chapter" data-level="1.3" data-path="pobreza.html"><a href="pobreza.html#desigualdad"><i class="fa fa-check"></i><b>1.3</b> Desigualdad</a></li>
+<li class="chapter" data-level="1.4" data-path="pobreza.html"><a href="pobreza.html#porcentaje-de-hogares-recibiendo-remesas"><i class="fa fa-check"></i><b>1.4</b> Porcentaje de hogares recibiendo remesas</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>2</b> Educación</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="cross.html"><a href="cross.html#asistencia-por-edad"><i class="fa fa-check"></i><b>2.1</b> Asistencia por edad</a></li>
-<li class="chapter" data-level="2.2" data-path="cross.html"><a href="cross.html#asistencia-neta"><i class="fa fa-check"></i><b>2.2</b> Asistencia neta</a></li>
-<li class="chapter" data-level="2.3" data-path="cross.html"><a href="cross.html#ninis"><i class="fa fa-check"></i><b>2.3</b> Ninis</a></li>
-<li class="chapter" data-level="2.4" data-path="cross.html"><a href="cross.html#tasa-de-abandono"><i class="fa fa-check"></i><b>2.4</b> Tasa de abandono</a></li>
-<li class="chapter" data-level="2.5" data-path="cross.html"><a href="cross.html#tasa-de-sobreedad"><i class="fa fa-check"></i><b>2.5</b> Tasa de sobreedad</a></li>
+<li class="chapter" data-level="2.1" data-path="cross.html"><a href="cross.html#asistencia-por-edad"><i class="fa fa-check"></i><b>2.1</b> Asistencia por edad</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="cross.html"><a href="cross.html#evolución"><i class="fa fa-check"></i><b>2.1.1</b> Evolución</a></li>
+<li class="chapter" data-level="2.1.2" data-path="cross.html"><a href="cross.html#cambio-promedio"><i class="fa fa-check"></i><b>2.1.2</b> Cambio promedio</a></li>
+<li class="chapter" data-level="2.1.3" data-path="cross.html"><a href="cross.html#por-nivel-de-ingreso-total"><i class="fa fa-check"></i><b>2.1.3</b> Por nivel de ingreso: Total</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="cross.html"><a href="cross.html#asistencia-neta"><i class="fa fa-check"></i><b>2.2</b> Asistencia neta</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="cross.html"><a href="cross.html#evolución-1"><i class="fa fa-check"></i><b>2.2.1</b> Evolución</a></li>
+<li class="chapter" data-level="2.2.2" data-path="cross.html"><a href="cross.html#cambio-promedio-1"><i class="fa fa-check"></i><b>2.2.2</b> Cambio promedio</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="cross.html"><a href="cross.html#ninis"><i class="fa fa-check"></i><b>2.3</b> Ninis</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="cross.html"><a href="cross.html#evolución-2"><i class="fa fa-check"></i><b>2.3.1</b> Evolución</a></li>
+<li class="chapter" data-level="2.3.2" data-path="cross.html"><a href="cross.html#cambio-promedio-2"><i class="fa fa-check"></i><b>2.3.2</b> Cambio promedio</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="cross.html"><a href="cross.html#tasa-de-abandono"><i class="fa fa-check"></i><b>2.4</b> Tasa de abandono</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="cross.html"><a href="cross.html#evolución-3"><i class="fa fa-check"></i><b>2.4.1</b> Evolución</a></li>
+<li class="chapter" data-level="2.4.2" data-path="cross.html"><a href="cross.html#cambio-promedio-3"><i class="fa fa-check"></i><b>2.4.2</b> Cambio promedio</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="cross.html"><a href="cross.html#tasa-de-terminación"><i class="fa fa-check"></i><b>2.5</b> Tasa de terminación</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="cross.html"><a href="cross.html#evolución-4"><i class="fa fa-check"></i><b>2.5.1</b> Evolución</a></li>
+<li class="chapter" data-level="2.5.2" data-path="cross.html"><a href="cross.html#cambio-promedio-4"><i class="fa fa-check"></i><b>2.5.2</b> Cambio promedio</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="cross.html"><a href="cross.html#tasa-de-sobreedad"><i class="fa fa-check"></i><b>2.6</b> Tasa de sobreedad</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="cross.html"><a href="cross.html#evolución-5"><i class="fa fa-check"></i><b>2.6.1</b> Evolución</a></li>
+<li class="chapter" data-level="2.6.2" data-path="cross.html"><a href="cross.html#cambio-promedio-5"><i class="fa fa-check"></i><b>2.6.2</b> Cambio promedio</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="mercado-laboral.html"><a href="mercado-laboral.html"><i class="fa fa-check"></i><b>3</b> Mercado laboral</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="mercado-laboral.html"><a href="mercado-laboral.html#tasa-de-participación"><i class="fa fa-check"></i><b>3.1</b> Tasa de participación</a></li>
-<li class="chapter" data-level="3.2" data-path="mercado-laboral.html"><a href="mercado-laboral.html#tasa-de-ocupación"><i class="fa fa-check"></i><b>3.2</b> Tasa de ocupación</a></li>
-<li class="chapter" data-level="3.3" data-path="mercado-laboral.html"><a href="mercado-laboral.html#tasa-desocupación"><i class="fa fa-check"></i><b>3.3</b> Tasa desocupación</a></li>
+<li class="chapter" data-level="3.1" data-path="mercado-laboral.html"><a href="mercado-laboral.html#tasa-de-ocupación"><i class="fa fa-check"></i><b>3.1</b> Tasa de ocupación</a></li>
+<li class="chapter" data-level="3.2" data-path="mercado-laboral.html"><a href="mercado-laboral.html#tasa-desocupación"><i class="fa fa-check"></i><b>3.2</b> Tasa desocupación</a></li>
+<li class="chapter" data-level="3.3" data-path="mercado-laboral.html"><a href="mercado-laboral.html#tasa-de-participación"><i class="fa fa-check"></i><b>3.3</b> Tasa de participación</a></li>
 <li class="chapter" data-level="3.4" data-path="mercado-laboral.html"><a href="mercado-laboral.html#salario-suficiente"><i class="fa fa-check"></i><b>3.4</b> Salario suficiente</a></li>
 <li class="chapter" data-level="3.5" data-path="mercado-laboral.html"><a href="mercado-laboral.html#ingreso-laboral-formales-e-informales"><i class="fa fa-check"></i><b>3.5</b> Ingreso laboral: formales e informales</a></li>
-<li class="chapter" data-level="3.6" data-path="mercado-laboral.html"><a href="mercado-laboral.html#duración-desempleo"><i class="fa fa-check"></i><b>3.6</b> Duración desempleo</a></li>
-<li class="chapter" data-level="3.7" data-path="mercado-laboral.html"><a href="mercado-laboral.html#empleos-sin-remuneración"><i class="fa fa-check"></i><b>3.7</b> Empleos sin remuneración</a></li>
-<li class="chapter" data-level="3.8" data-path="mercado-laboral.html"><a href="mercado-laboral.html#pensionistas"><i class="fa fa-check"></i><b>3.8</b> Pensionistas</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="diversidad.html"><a href="diversidad.html"><i class="fa fa-check"></i><b>4</b> Diversidad</a>
 <ul>
@@ -182,40 +188,132 @@ div.csl-indent {
 <div id="mercado-laboral" class="section level1" number="3">
 <h1><span class="header-section-number">Sección 3</span> Mercado laboral</h1>
 <p>En esta sección se consideran los indicadores de mercado laboral</p>
-<div id="tasa-de-participación" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Tasa de participación</h2>
-<p>Tasa global de participación (tasa_participacion)</p>
+<p>En esta sección se consideran los indicadores de tasa de participación, tasa de ocupación, porcentaje de población viviendo con salario suficiente y cambio en el ingreso laboral para trabajadores formales e informales.</p>
+<p>En primer lugar, como análisis general se presenta una tabla resumen de los indicadores laborales que serán analizados en esta sección, con excepción de los datos de ingreso que se ilustran más adelante. Este resumen general se presenta para todos los países y años de los que se tiene información, y no únicamente para los que tienen datos en 2020.</p>
+<p>Tabla <a href="mercado-laboral.html#fig:merTab">3.1</a> Indicadores de mercado laboral</p>
+<div class="figure"><span style="display:block;" id="fig:merTab"></span>
+<div id="htmlwidget-d057867fd10a8faf3e39" style="width:825px;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d057867fd10a8faf3e39">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"2006\" data-max=\"2021\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0.7\" data-max=\"41.82\" data-scale=\"2\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"1.59\" data-max=\"97.6\" data-scale=\"2\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"1.19\" data-max=\"17.38\" data-scale=\"2\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"38.52\" data-max=\"85.51\" data-scale=\"2\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"39.57\" data-max=\"99.82\" data-scale=\"2\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","data":[["Argentina","Argentina","Argentina","Argentina","Argentina","Argentina","Argentina","Argentina","Argentina","Argentina","Argentina","Argentina","Argentina","Average","Average","Average","Average","Average","Average","Average","Average","Average","Average","Average","Average","Average","Average","Average","Average","Bahamas","Bahamas","Bahamas","Bahamas","Bahamas","Bahamas","Bahamas","Bahamas","Bolivia","Bolivia","Bolivia","Bolivia","Bolivia","Bolivia","Bolivia","Bolivia","Bolivia","Bolivia","Bolivia","Brazil","Brazil","Brazil","Brazil","Brazil","Brazil","Brazil","Brazil","Brazil","Brazil","Brazil","Brazil","Brazil","Brazil","Chile","Chile","Chile","Chile","Chile","Chile","Chile","Colombia","Colombia","Colombia","Colombia","Colombia","Colombia","Colombia","Colombia","Colombia","Colombia","Colombia","Costa Rica","Costa Rica","Costa Rica","Costa Rica","Costa Rica","Costa Rica","Costa Rica","Costa Rica","Costa Rica","Costa Rica","Costa Rica","Dominican Republic","Dominican Republic","Dominican Republic","Dominican Republic","Dominican Republic","Dominican Republic","Dominican Republic","Dominican Republic","Dominican Republic","Dominican Republic","Dominican Republic","Dominican Republic","Dominican Republic","Dominican Republic","Ecuador","Ecuador","Ecuador","Ecuador","Ecuador","Ecuador","Ecuador","Ecuador","Ecuador","Ecuador","Ecuador","Ecuador","Ecuador","Ecuador","Ecuador","El Salvador","El Salvador","El Salvador","El Salvador","El Salvador","El Salvador","El Salvador","El Salvador","El Salvador","El Salvador","El Salvador","El Salvador","El Salvador","El Salvador","Guatemala","Guatemala","Guatemala","Guatemala","Guatemala","Guatemala","Guatemala","Guatemala","Guatemala","Guatemala","Guyana","Guyana","Guyana","Honduras","Honduras","Honduras","Honduras","Honduras","Honduras","Honduras","Honduras","Honduras","Honduras","Jamaica","Jamaica","Jamaica","Jamaica","Jamaica","Jamaica","Jamaica","Jamaica","Mexico","Mexico","Mexico","Mexico","Mexico","Mexico","Mexico","Mexico","Panama","Panama","Panama","Panama","Panama","Panama","Panama","Panama","Panama","Panama","Panama","Panama","Panama","Panama","Paraguay","Paraguay","Paraguay","Paraguay","Paraguay","Paraguay","Paraguay","Paraguay","Paraguay","Paraguay","Paraguay","Paraguay","Paraguay","Paraguay","Paraguay","Peru","Peru","Peru","Peru","Peru","Peru","Peru","Peru","Peru","Peru","Peru","Peru","Peru","Peru","Peru","Suriname","Trinidad and Tobago","Trinidad and Tobago","Trinidad and Tobago","Trinidad and Tobago","Trinidad and Tobago","Trinidad and Tobago","Trinidad and Tobago","Trinidad and Tobago","Trinidad and Tobago","Trinidad and Tobago","Uruguay","Uruguay","Uruguay","Uruguay","Uruguay","Uruguay","Uruguay","Uruguay","Uruguay","Uruguay","Venezuela","Venezuela","Venezuela","Venezuela","Venezuela","Venezuela","Venezuela","Venezuela","Venezuela","Venezuela","Venezuela","Venezuela","Venezuela","Venezuela","Venezuela"],[2006,2007,2008,2009,2010,2012,2013,2014,2015,2016,2018,2019,2020,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2006,2007,2008,2009,2011,2012,2013,2014,2008,2009,2012,2013,2014,2015,2016,2017,2018,2019,2020,2006,2007,2008,2009,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2006,2009,2011,2013,2015,2017,2020,2006,2008,2009,2010,2011,2012,2013,2014,2015,2019,2020,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2018,2019,2020,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2017,2018,2019,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2006,2007,2008,2009,2010,2012,2013,2014,2006,2008,2010,2012,2014,2016,2018,2020,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2017,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2006,2007,2008,2009,2010,2011,2012,2018,2019,2020,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2021],[null,null,null,null,null,null,null,null,null,null,null,null,null,6.34,7.04,7.19,7.06,6.57,5.77,7.42,7.96,8.07,6.21,6.43,6.64,8.57,8.42,9.42,null,6.84,7.14,7.09,7.59,8.64,null,8.8,9.07,17.92,19.95,18.78,19.64,18.55,14.08,12.16,11.28,13,12.44,null,null,null,null,null,null,null,null,null,null,12.07,12.72,39.78,41.28,41.82,2.98,3.03,1.92,2.14,2.35,2.53,null,6.27,5.17,5.85,5.58,5.17,4.85,4.75,4.46,4.43,5.79,5.77,6,5.72,6.24,7.34,8.31,8.01,7.39,7.19,7.06,7.51,5.91,5.21,4.33,5.29,6.39,5.63,5.95,6.27,5.91,5.76,5.9,5.6,4.33,3.88,4.1,3.97,3.49,3.12,3.17,3.19,3,3.12,2.92,2.93,3.51,4.38,4.25,4.07,3.71,4.08,1.09,1.15,0.91,1.07,null,null,null,null,null,null,null,null,null,null,5.05,4.74,4.8,5.14,5.08,5.9,7.15,6.49,8.64,7.96,15.81,12.14,11.89,3.38,6.3,3.58,1.98,3.01,2.94,3.89,2.68,2.78,2.88,14.25,14.01,12.16,11.53,12.93,14.83,14.63,15.66,null,null,null,null,null,null,null,null,7,5.94,4.63,3.97,5.33,4.19,4.63,3.49,3.58,3.15,4.07,3.99,4.51,5.33,6.32,12.19,9.28,8.28,6.41,6.2,5.06,7.28,6.7,5.87,6.6,5.49,4.02,3.6,5.4,0.93,0.81,0.91,0.88,0.7,0.73,0.73,0.82,0.79,0.83,0.94,0.92,0.99,0.98,0.94,8.62,9.72,11.03,11.11,8.77,12.27,10.68,12.77,16.32,12.03,7.66,2.9,2.39,2.12,2.09,1.87,1.71,1.65,1.98,1.93,2.03,14.91,15.01,13.75,16.26,17.05,15.87,16.56,18.19,17.12,16.12,null,null,null,null,null],[81.14,85.51,86.07,86.07,88.06,89.83,90.94,90.14,88.66,89.06,89.99,87.29,null,60.23,64.97,63.18,69.17,65.77,70.14,66.98,72.07,70.62,72.06,66.76,68.26,66.44,69.47,67.6,null,null,null,null,95.54,94.59,null,94.39,94.03,40.1,45.8,53.02,53.63,58.44,58.39,56.51,58.27,60.96,76.66,83.6,55.43,59.62,62.8,65.55,70.73,78.22,79.98,82.05,81.06,83.49,82.35,83.55,82.34,84.56,80.71,90.13,92.36,94,91.52,92.22,38.21,46.32,53.83,53.31,53.77,54.98,55.75,59.36,60.71,61.66,63.81,57.96,82.97,85.57,84.97,84.33,85.19,85.67,85.77,87.57,87.4,88.29,83.01,60.47,62.07,60.99,62.5,62.33,61.1,60.4,61.61,64.5,68.68,70.86,72.33,74.05,76.54,55.27,56.78,58.14,58.1,64.11,68.44,72.36,76.35,76.69,75.96,74.17,75.23,75.52,73.84,69.66,45.57,48.35,51.91,53.94,46.62,53,55.24,57.66,58.91,60.96,62.3,68.73,69.45,70.19,53.28,51.86,46.85,50.44,50.54,47.95,46.63,45.14,44.33,43.91,91.75,93.21,94.02,46.3,43.1,41.21,40.12,46.21,42.72,44.45,41.51,37.09,43.7,null,null,null,null,null,null,null,null,null,53.63,48.46,46.05,46.89,50.94,51.76,48.95,68.22,69.71,72.71,73.33,75.12,74.57,79.23,80.49,79.03,80.65,81.58,80.97,80.03,82.22,48.09,52.95,53.9,53.58,59.89,61.28,63.05,66.63,69.94,69.2,67.87,69.32,71.33,72.65,72.79,29.28,35.23,38,39.42,42.62,45.93,48.77,50.61,51.36,52.75,53.63,53.41,54.96,62.09,49.97,71.21,93.85,94.52,95.75,97.6,93.93,95.12,94.77,93.32,94.47,95.27,39.05,65.04,69.36,73.09,78.18,79.49,82.87,88.6,88.26,84.72,79.56,84.9,87.37,89.51,90.94,90.07,86.16,91.38,91.44,91.85,67.35,34.4,1.59,6.45,null],[9.36,7.92,7.52,8.73,7.37,7.25,6.61,7.23,6.84,8.04,9.06,9.31,11.32,7.2,6.14,6.13,7.27,6.06,6.37,6.11,6.44,6.09,5.48,5.57,6.5,6.22,6.67,9.64,6.46,7.58,7.03,8.2,13.98,16.58,14.08,15.81,14.33,2.48,2.72,2,2.28,1.9,2.98,2.88,3.11,3.18,3.61,8.18,8.38,8.12,7.11,8.3,6.72,6.21,6.52,6.9,9.61,11.68,12.75,12.41,11.83,13.56,7.32,10.25,7.74,7.04,7.48,7.86,12.68,13.97,11.42,12.19,11.46,10.45,10.18,9.38,8.84,8.97,10.58,13.78,7.32,7.68,7.82,8.51,8.54,8.46,7.77,7.45,8.25,9.16,17.38,5.25,4.9,4.65,5.67,4.99,5.95,6.97,7.05,5.97,5.89,5.29,5.16,5.91,5.9,3.43,3.05,3.98,4.53,3.5,2.99,3.14,2.96,3.04,3.71,4.05,3.69,2.93,3.25,3.94,3.57,3.64,3.67,4.69,4.6,4.01,3.65,3.53,3.95,3.8,4.23,3.9,3.96,5.02,2.66,2.71,2.13,2.23,1.77,1.86,1.86,1.66,2.05,1.19,12.07,14.37,14.11,4.95,5.57,4.54,5.47,6.86,5.89,6.49,5.4,2.92,2.68,10.67,8.85,11.7,11.11,12.4,14.26,16.26,13.57,3.34,4.51,5.7,4.27,4.68,3.13,2.97,5.26,7.82,5.75,5.08,5.26,4.8,5.26,4.31,4.13,3.96,5.1,5.55,5.48,5.67,6.27,6.65,5.6,5.72,6.4,4.24,5.62,4.84,4.98,6.04,5.33,6,5.2,5.61,5.73,7.14,4.3,4.74,4.53,4.45,4.07,3.92,3.57,3.73,3.47,3.32,3.96,3.92,3.7,3.69,7,8.72,3.83,3.57,2.92,2.79,3.78,3.15,3.43,2.49,2.22,2.2,10.75,9.38,8.01,7.74,7.16,6.32,6.46,8.33,8.87,10.35,9,7.29,6.57,7.5,7.95,7.33,6.99,7.01,6.38,6.25,7.01,8.49,8.25,6.63,6.46],[50.54,50.07,50.37,49.93,50.18,51.18,50.76,49.84,49.37,49.09,49.55,49.95,45.64,54.37,56.15,56.08,54.4,52.49,53.39,54.78,53.87,56.9,54.5,53.41,53.55,53.58,53.74,51.75,43.14,68.84,70.32,68.75,63.08,60.32,64.21,60.68,85.51,59.18,58.91,59.78,61.62,64.39,58.9,63.4,60.24,59.18,67.06,63.52,57.18,56.98,57.55,56.95,55.98,56.19,55.82,56.75,53.67,51.07,50.85,50.59,51.89,46.46,49.59,47.14,48.8,50.49,51.32,52.27,45.57,47.72,51.74,53.5,55.61,56.7,57.54,58.13,58.59,58.64,56.22,53.27,51.35,52.73,52.1,51.44,51.41,52.06,52.84,51.08,50.62,49.43,41.54,47.02,47.54,47.55,45.94,47.21,48.06,47.99,48.04,48.98,50.05,50.55,58.13,59.85,60.9,52.34,57.06,54.85,48.64,52.24,52.9,52.41,51.88,62.02,62.64,50.49,51.36,49.75,50.15,48.45,42.66,43.48,44.29,44.18,43.76,44.63,45.98,46.87,46.24,46.25,46.62,46.48,47.36,46.16,38.52,41.5,43.8,43.49,47.97,48.91,46.93,47.91,48.15,47.16,47.68,44.11,42.11,45.11,43.72,43.5,45.79,46.92,47.71,46.95,48.3,50.13,48.36,57.83,58.68,57.41,50.3,54.33,53.83,53.38,54.51,57.99,55.39,53.83,58.63,56.31,59.48,60,57.34,50.88,52.23,53.57,53.13,52.34,51.38,53.46,52.1,54.71,55,54.86,55.03,57.12,56,55.4,57.37,58.19,58.88,57.13,57.3,61.19,59.56,57.9,58.34,58.89,59.81,60.75,61.5,60.24,66.69,67.61,67.6,69.3,69.54,69.24,67.85,67.49,68.23,67.86,68.12,68.33,68.39,68.78,58.54,51.16,60.09,60.12,60.75,59.91,58.7,58.25,59.16,59.32,60.08,58.75,54.15,56.69,57.66,58.54,58.43,60.67,59.88,57.24,56.67,54.27,51.06,51.74,52.49,52.07,51.55,52.03,52.06,52.88,53.76,52.5,48.44,47.63,45.39,46.27,43.14],[55.76,54.38,54.46,54.71,54.17,55.18,54.35,53.72,53,53.38,54.49,55.07,51.47,58.62,59.87,59.8,58.73,55.96,57.17,58.51,57.78,60.87,57.7,56.65,57.31,57.13,57.83,57.45,46.11,74.49,75.64,74.89,73.32,72.31,74.73,72.08,99.82,60.69,60.55,61.71,64.05,66.85,61.37,66.68,62.82,61.35,73.44,72.03,62.42,62.02,61.96,62.1,60.01,59.91,59.72,60.96,59.38,57.83,58.28,57.76,58.86,53.75,53.51,52.52,52.9,54.31,55.47,56.73,52.19,55.47,58.41,60.93,62.8,63.32,64.07,64.15,64.28,64.42,62.87,61.79,55.4,57.11,56.53,56.22,56.21,56.87,57.3,55.19,55.17,54.42,50.27,49.68,50.04,49.9,48.73,49.7,51.11,51.59,51.7,52.11,53.21,53.4,61.44,63.7,64.8,54.21,58.86,57.13,50.94,54.14,54.53,54.11,53.47,63.97,65.05,52.62,53.33,51.25,51.84,50.44,44.24,45.13,45.98,46.35,45.87,46.5,47.72,48.58,48.14,48.08,48.68,48.37,49.31,48.6,39.57,42.5,44.7,44.47,48.85,49.82,47.85,48.7,49.16,47.72,54.23,51.51,49.03,47.46,46.3,45.57,48.44,50.38,50.69,50.21,51.05,51.64,49.69,64.73,64.38,65.02,56.59,62.02,62.78,63.74,63.07,59.99,58.01,57.08,61.25,59.08,61.4,61.84,60.52,55.2,55.41,56.44,56.08,54.98,54.23,55.86,54.34,56.97,57.96,58.08,58.22,60.55,59.75,59.35,60.78,61.72,62.91,59.66,60.71,64.31,62.68,61.62,61.63,62.64,63.09,64.36,65.24,64.87,69.69,70.97,70.81,72.53,72.49,72.06,70.36,70.11,70.69,70.19,70.92,71.12,71.02,71.42,62.94,56.04,62.48,62.34,62.58,61.62,61.01,60.15,61.26,60.83,61.45,60.07,60.67,62.55,62.68,63.45,62.94,64.76,64.02,62.44,62.19,60.54,56.11,55.8,56.18,56.29,56,56.15,55.97,56.86,57.42,56,52.1,52.04,49.47,49.55,46.11]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>País<\/th>\n      <th>Año<\/th>\n      <th>Tasa de participación<\/th>\n      <th>Tasa de ocupación<\/th>\n      <th>Tasa desocupación<\/th>\n      <th>Población salario lab suficiente<\/th>\n      <th>duración desempleo<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"scrollX":true,"searching":true,"searchHighlight":true,"lengthMenu":[10,20,30,40,50],"columnDefs":[{"targets":2,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 2, 2, \",\", \".\");\n  }"},{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 2, 2, \",\", \".\");\n  }"},{"targets":4,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 2, 2, \",\", \".\");\n  }"},{"targets":5,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 2, 2, \",\", \".\");\n  }"},{"targets":6,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 2, 2, \",\", \".\");\n  }"},{"className":"dt-center","targets":[0,1,2,3,4,5]},{"className":"dt-right","targets":6}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[-1]; $(this.api().cell(row, -1).node()).css({'color':'#002126'});\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'color':'#002126'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'color':'#002126'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'color':'#002126'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'color':'#002126'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'color':'#002126'});\n}"}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render","options.columnDefs.4.render","options.rowCallback"],"jsHooks":[]}</script>
+<p class="caption">
+Figure 3.1: Fuente SCLData
+</p>
 </div>
-<div id="tasa-de-ocupación" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Tasa de ocupación</h2>
-<p>(tasa_ocupacion)</p>
+<div id="tasa-de-ocupación" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Tasa de ocupación</h2>
+<p>En primer lugar se analiza la tasa de ocupación y su cambio en 2020. Este indicador se refiere a las personas ocupadas entre las personas en edad de trabajar. Este indicador tuvo afectaciones fuertes generadas por la pandemia del COVID-19. Considerando la evolución en la siguiente gráfica (<a href="mercado-laboral.html#fig:evo-ocu">3.2</a>) se puede observar que, en promedio, la región tuvo una caída importante en ocupación.</p>
+<div class="figure"><span style="display:block;" id="fig:evo-ocu"></span>
+<img src="03-Mercado-laboral_files/figure-html/evo-ocu-1.png" alt="Evolución de la tasa de ocupación" width="960" />
+<p class="caption">
+Figure 3.2: Evolución de la tasa de ocupación
+</p>
 </div>
-<div id="tasa-desocupación" class="section level2" number="3.3">
-<h2><span class="header-section-number">3.3</span> Tasa desocupación</h2>
-<p>(tasa_desocupacion)</p>
+<p>Observando únicamente el cambio entre 2020 y 2019 en la Gráfica <a href="mercado-laboral.html#fig:camb-ocu">3.3</a> la diferencia es más clara. El país con una mayor caída en la tasa de ocupación fue Perú con una disminución de 10.2 puntos porcentuales, seguido por Costa Rica con una caída de 7.9 puntos porcentuales. En promedio, la región sufrió una disminución de 4.4 puntos porcentuales en la tasa de ocupación.</p>
+<div class="figure"><span style="display:block;" id="fig:camb-ocu"></span>
+<img src="03-Mercado-laboral_files/figure-html/camb-ocu-1.png" alt="Cambio en la tasa de ocupación" width="672" />
+<p class="caption">
+Figure 3.3: Cambio en la tasa de ocupación
+</p>
+</div>
+<p>Considerando este indicador por género en se observa que la caída en la ocupación fue prácticamente igual con una disminución de 4.4 para los hombres y 4.3 para las mujeres.</p>
+<div class="figure"><span style="display:block;" id="fig:cat-ocu"></span>
+<img src="03-Mercado-laboral_files/figure-html/cat-ocu-1.png" alt="Cambio en la tasa de ocupación por género" width="672" />
+<p class="caption">
+Figure 3.4: Cambio en la tasa de ocupación por género
+</p>
+</div>
+</div>
+<div id="tasa-desocupación" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Tasa desocupación</h2>
+<p>La tasa de desocupación se construye como la división del número de personas desocupadas, es decir que no tienen un trabajo y lo están buscando activamente, y el número de personas en edad de trabajar. Considerando la evolución se observa que en promedio parece haber habido un aumento relevante en la desocupación en 2020, con una recuperación para 2021.</p>
+<div class="figure"><span style="display:block;" id="fig:evo-des"></span>
+<img src="03-Mercado-laboral_files/figure-html/evo-des-1.png" alt="Evolución de tasa de desocupación" width="960" />
+<p class="caption">
+Figure 3.5: Evolución de tasa de desocupación
+</p>
+</div>
+<p>Con los datos de cambios entre las cifras de 2019 y 2020 se observa que en promedio el aumento de la población desocupada fue de 3.0 puntos porcentuales. El país con el mayor cambio fue Costa Rica con un aumento de 8.2 puntos porcentuales en la población desocupada. En contraste, Ecuador fue el país con el menor cambio con un aumento de 0.7 puntos porcentuales entre la cifra de población desocupada en 2019 y 2020.</p>
+<div class="figure"><span style="display:block;" id="fig:camb-des"></span>
+<img src="03-Mercado-laboral_files/figure-html/camb-des-1.png" alt="Cambio en la tasa de desocupación" width="672" />
+<p class="caption">
+Figure 3.6: Cambio en la tasa de desocupación
+</p>
+</div>
+<p>Considerando este indicador por género se observa que el aumento en la desocupación fue mayor para las mujeres. Esto es relevante ya que muchos indicadores muestran que la pandemia afectó especialmente a la población femenina, que ya partía de una situación de desventaja en muchos entornos, incluido el mercado laboral. Será importante generar esfuerzos para incorporar a las mujeres a la fuerza laboral, especialmente después de la pandemia.</p>
+<div class="figure"><span style="display:block;" id="fig:cat-des"></span>
+<img src="03-Mercado-laboral_files/figure-html/cat-des-1.png" alt="Cambio en la tasa de desocupación por género" width="672" />
+<p class="caption">
+Figure 3.7: Cambio en la tasa de desocupación por género
+</p>
+</div>
+</div>
+<div id="tasa-de-participación" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Tasa de participación</h2>
+<p>La tasa de participación es el porcentaje de personas económicamente activas entre las personas con edad de trabajar. Se considera como económicamente activas a las personas que tienen un trabajo, o lo están buscando activamente.</p>
+<p>Observando la evolución de esta serie algunos países presentan una caída considerable en el 2020. Este es el caso de Chile, Brasil, Argentina, Costa Rica y Perú.</p>
+<div class="figure"><span style="display:block;" id="fig:evo-part"></span>
+<img src="03-Mercado-laboral_files/figure-html/evo-part-1.png" alt="Evolución de tasa global de participación" width="960" />
+<p class="caption">
+Figure 3.8: Evolución de tasa global de participación
+</p>
+</div>
+<p>En efecto, observando el cambio en puntos porcentuales se puede ver que Perú fue el país cuya tasa de participación presentó una mayor caída con una disminución de 8.5 puntos porcentuales. De forma similar la caída para Brasil fue de 5.1 puntos porcentuales. En promedio, para los países de los que se tiene información la caída de 2019 a 2020 fue de 2.9 puntos porcentuales.</p>
+<div class="figure"><span style="display:block;" id="fig:camb-part"></span>
+<img src="03-Mercado-laboral_files/figure-html/camb-part-1.png" alt="Cambio en la tasa global de participación" width="672" />
+<p class="caption">
+Figure 3.9: Cambio en la tasa global de participación
+</p>
+</div>
+<p>Observando el cambio por género se puede observar que, en promedio, la caída en participación fue la misma para hombres y mujeres. No obstante, considerando los dos países con una mayor disminución el cambio fue provocado mayormente por la caída en la participación de las mujeres. En este sentido es relevante destacar que la tasa de participación de las mujeres es significativamente más baja que la de los hombres. Específicamente, para 2020 la tasa de participación de las mujeres fue de 47.09% mientras que la de los hombres fue de 68.11%, por lo que, aún si la caída de la tasa fue similar en puntos porcentuales, la caída con relación a su valor es más alto para las mujeres.</p>
+<div class="figure"><span style="display:block;" id="fig:cat-part"></span>
+<img src="03-Mercado-laboral_files/figure-html/cat-part-1.png" alt="Cambio en la tasa global de participación por género" width="672" />
+<p class="caption">
+Figure 3.10: Cambio en la tasa global de participación por género
+</p>
+</div>
 </div>
 <div id="salario-suficiente" class="section level2" number="3.4">
 <h2><span class="header-section-number">3.4</span> Salario suficiente</h2>
-<p>Población ocupada en trabajos con salario suficiente (ocup_suf_salario)</p>
+<p>Además de las cifras de la población con y sin empleo también es relevante considerar qué sucedió con los ingresos de las personas que mantuvieron sus trabajos. Se sabe que la pandemia afectó a muchos trabajadores que sufrieron recortes en sus ingresos. En este sentido se analiza la evolución de la población que cuenta con un salario suficiente. Se considera como salario suficiente a las personas ocupadas que tienen un salario, ajustado por equivalencias, de US$1.95 o más por hora.</p>
+<p>La evolución de este indicador sugiere en promedio una disminución moderada de la población con salario suficiente. Asimismo, hay países en los que se observa un cambio más marcado como en Chile y Costa Rica.</p>
+<div class="figure"><span style="display:block;" id="fig:evo-suf"></span>
+<img src="03-Mercado-laboral_files/figure-html/evo-suf-1.png" alt="Evolución de la población con salario suficiente" width="960" />
+<p class="caption">
+Figure 3.11: Evolución de la población con salario suficiente
+</p>
+</div>
+<p>Considerando los cambios entre 2019 y 2020 se observa que Chile tuvo una disminución de 54 puntos porcentuales en su población con salario suficiente. Este dato parece no ser correcto por lo que se revisará el proceso de armonización para descartar anomalías en este. Por otro lado, Perú presenta una disminución marcada de la población con salario suficiente y este dato parece correcto. En contraste, El Salvador, Brasil y Bolivia muestran un incremento en las personas con salario suficiente.</p>
+<div class="figure"><span style="display:block;" id="fig:camb-suf"></span>
+<img src="03-Mercado-laboral_files/figure-html/camb-suf-1.png" alt="Cambio de la población con salario suficiente" width="672" />
+<p class="caption">
+Figure 3.12: Cambio de la población con salario suficiente
+</p>
+</div>
+<p>Por género los datos de este indicador son prácticamente idénticos por lo que no se presenta la gráfica implícitamente.</p>
 </div>
 <div id="ingreso-laboral-formales-e-informales" class="section level2" number="3.5">
 <h2><span class="header-section-number">3.5</span> Ingreso laboral: formales e informales</h2>
-<p>Promedio de ingreso laboral monetario en el último mes (ingreso_mens_prom).
-Promedio de ingreso laboral formales (inglaboral_formales)
-Promedio de ingreso laboral informales (inglaboral_informales)</p>
+<p>Finalmente, en esta sección también es relevante analizar las diferencia en los salarios percibidos en el 2019 y 2020. En este caso únicamente se presentan las gráficas de cambios ya que el salario no está en unidades comparables entre países, por lo que el análisis en niveles no es el más directo.</p>
+<p>En promedio se observó una disminución de 4.1% del salario mensual entre 2019 y 2020 en la región. El país con una disminución mayor fue Perú con una caída de 23.8% en el salario mensual, seguido por Ecuador que experimentó una caída del 10.8%. En contraste, Bolivia, Brasil, El Salvador y Chile parecen haber incrementado su salario mensual. Sin embargo, en este caso es relevante considerar que los datos de Chile tienen una revisión pendiente, sobre todo en cuanto a ingreso.</p>
+<div class="figure"><span style="display:block;" id="fig:camb-ing"></span>
+<img src="03-Mercado-laboral_files/figure-html/camb-ing-1.png" alt="Cambio en el salario mensual" width="672" />
+<p class="caption">
+Figure 3.13: Cambio en el salario mensual
+</p>
 </div>
-<div id="duración-desempleo" class="section level2" number="3.6">
-<h2><span class="header-section-number">3.6</span> Duración desempleo</h2>
-<p>Promedio de duración en el desempleo. (en meses) (dura_desempleo)</p>
+<p>La caída fue más notoria para los trabajadores informales, dónde el salario disminuyó en promedio entre 2019 y 2020 en 6.0%, siendo otra vez Perú el país que experimentó una mayor caída.</p>
+<div class="figure"><span style="display:block;" id="fig:camb-ing-inf"></span>
+<img src="03-Mercado-laboral_files/figure-html/camb-ing-inf-1.png" alt="Cambio en el salario mensual informales" width="672" />
+<p class="caption">
+Figure 3.14: Cambio en el salario mensual informales
+</p>
 </div>
-<div id="empleos-sin-remuneración" class="section level2" number="3.7">
-<h2><span class="header-section-number">3.7</span> Empleos sin remuneración</h2>
-<p>Personas ocupadas sin remuneración en porcentaje. (tasa_sinremuneracion)</p>
+<p>En contraste, los trabajadores formales parecen haber incrementado su salario mensual, sobre todo influenciados por las cifras de Chile y Argentina. En la mayoría de los países el cambio en los trabajadores formales fue más modesto, y se puede ver que la pandemia tuvo consecuencia más notorias en el salario de la población informal que de por sí tenían condiciones más vulnerables. Esto señala la importancia de tomar medidas pertinentes en la región, aún más después de la pandemia.</p>
+<div class="figure"><span style="display:block;" id="fig:camb-ing-for"></span>
+<img src="03-Mercado-laboral_files/figure-html/camb-ing-for-1.png" alt="Cambio en el salario mensual informales" width="672" />
+<p class="caption">
+Figure 3.15: Cambio en el salario mensual informales
+</p>
 </div>
-<div id="pensionistas" class="section level2" number="3.8">
-<h2><span class="header-section-number">3.8</span> Pensionistas</h2>
-<p>Personas de 65 o más que declaran un monto recibido. Contributiva y no contributiva.
-(pensionista_65_mas) (pensionista_cont_65_mas)</p>
 
 </div>
 </div>
