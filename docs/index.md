@@ -16,7 +16,7 @@ url: https://bid-data.github.io/evaluacion-indicadores-covid/
 
 Este documento detalla el cambio en indicadores relevantes después de la pandemia del COVID-19 para la región de América Latina y el Caribe. El análisis se divide en cinco secciones, una por cada tema de indicador. En particular los indicadores se dividen en:
 
-1. Pobreza y protección social
+1. Pobreza 
 2. Educación
 3. Mercado laboral
 4. Diversidad
