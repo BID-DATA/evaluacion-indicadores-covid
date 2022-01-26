@@ -6,6 +6,8 @@
 *.pdf
 *-Ex.R
 *.rds
+.Rproj.user
+
 # Output files from R CMD build
 /*.tar.gz
 
@@ -23,11 +25,14 @@ data/*
 .Rhistory
 .rstudio/*
 _bookdown_files/
+libs/
+**/*.bib
+**/*.html
 _main_cache/
 _main_files/
 SV_mapping_cache/
 SV_mapping.Rmd
-.Rproj.user
+
 *.md
 # Temporary files created by R markdown
 *.utf8.md

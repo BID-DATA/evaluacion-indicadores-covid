@@ -1,0 +1,474 @@
+# Educación {#cross}
+
+Una de las consecuencias importantes que tuvieron las medidas tomadas a raíz de la pandemia del COVID-19 fue el cierre de escuelas. En este sentido, esta sección describe algunos de los indicadores más relevantes relacionados con este tema. En particular, se consideran la tasa neta de asistencia escolar, tasa de asistencia escolar por edad, porcentaje de jóvenes que no
+estudian ni trabajan, tasa de terminación escolar, tasa de abandono y tasa de sobreedad.
+
+
+```{r indicadores tablas, include=FALSE}
+
+source("Indicadores funciones.R")
+
+
+#### Table 
+
+table2 <- query_indicator(indicator = 'tasa_asis_edad,leavers,Ninis_2', 
+                         categories = 'age') %>% 
+  mutate(year = case_when(isoalpha3 == "CHL" & year == 2017 ~ 2019,
+                          isoalpha3 == "MEX" & year == 2018 ~ 2019,
+                          TRUE ~ year)) %>% 
+  group_by(isoalpha3, year, indicator) %>% 
+  mutate(value = mean(value, na.rm = TRUE), 
+         age = "Promedio", 
+         sample = NA_character_, 
+         cv = NA_character_, 
+         se = NA_character_) %>%
+  distinct() %>% 
+  rbind(grouped_mean(., value, indicator, year)) %>% 
+      ungroup() %>% 
+  select(country_name_en, year, indicator, value) %>% 
+  ungroup() %>% 
+  arrange(indicator, country_name_en, year) %>% 
+  mutate(value = case_when(value>1 ~ value/100, 
+                               TRUE ~ value)) %>% 
+  distinct() %>% 
+  spread(indicator, value) 
+
+table <- query_indicator(indicator = 'tasa_neta_asis,tasa_sobre_edad,tasa_terminacion_c',
+                         categories = 'education_level') %>% 
+  mutate(year = case_when(isoalpha3 == "CHL" & year == 2017 ~ 2019,
+                          isoalpha3 == "MEX" & year == 2018 ~ 2019,
+                          TRUE ~ year)) %>% 
+   filter(isoalpha3!= "TTO") %>% 
+  group_by(isoalpha3, year, indicator) %>% 
+  mutate(value = mean(value, na.rm = TRUE), 
+         education_level = "Promedio", 
+         sample = NA_character_, 
+         cv = NA_character_, 
+         se = NA_character_) %>%
+  distinct() %>% 
+  rbind(grouped_mean(., value, indicator, year)) %>% 
+      ungroup() %>% 
+  select(country_name_en,  year, indicator, value) %>% 
+  ungroup() %>% 
+  mutate(value = round(value, 2)) %>% 
+  distinct() %>% 
+  mutate(value = case_when(value>1 ~ value/100, 
+                               TRUE ~ value)) %>% 
+  spread(indicator, value) %>% 
+  left_join(table2) %>% 
+  rename_all(funs(c('País', 'Año', 'Tasa neta de asistencia', 'Tasa sobreedad', 'Tasa terminación', 'Tasa abandono', 'Ninis', 'Tasa asistencia por edad'))) 
+
+```
+
+```{r indicadores indicadores gen, include=FALSE}
+
+promedio_list <-list()
+
+# tasa asis edad: esta se hace por separado porque es la única que tiene los datos así. pero un for para quintil
+
+grupo_asis_prom <- query_indicator(indicator = 'tasa_asis_edad', 
+                                   countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL',
+                                   categories = 'age,quintile', 
+                                   yearstart = 2010, 
+                                   yearend = 2021) %>% 
+  mutate(year = case_when(isoalpha3 == "CHL" & year == 2017 ~ 2019,
+                          isoalpha3 == "MEX" & year == 2018 ~ 2019,
+                          TRUE ~ year))
+
+promedio_sin <- grupo_asis_prom %>% 
+  group_by(isoalpha3, year, quintile) %>% 
+  mutate(value = mean(value), 
+         age = "Promedio", 
+         sample = NA_character_, 
+         cv = NA_character_, 
+         se = NA_character_) %>% 
+  distinct()
+
+dat <- grupo_asis_prom %>% 
+  rbind(promedio_sin) 
+
+data_fin <- list()
+
+asis_graph <- list()
+
+asis_graph_col <- list()
+
+aux_quin <- promedio_sin %>% 
+  ungroup() %>% 
+  select(quintile) %>% 
+  distinct() 
+
+asis_quin <- set_names(aux_quin$quintile)
+
+data_fin1 <- dat %>% 
+  rbind(grouped_mean(dat, value, year, age, quintile)) %>% 
+  ungroup() %>% 
+  group_by(isoalpha3, age, quintile) %>% 
+  arrange(isoalpha3, age, year, quintile) %>% 
+  mutate(change_pp = value - lag(value)) %>% 
+  filter(year == 2020) %>% 
+  filter(!age == "04_05")
+
+for(i in names(asis_quin)) {
+  
+data_fin[[i]] <- data_fin1 %>% 
+   filter(quintile == i) 
+  
+asis_graph[[i]] <- data_fin[[i]] %>% 
+  filter(age == "Promedio") %>% 
+  ggplot(aes(x = fct_reorder(isoalpha3, change_pp))) +
+  geom_col(aes(y = change_pp), alpha = 0.7, show.legend = FALSE, fill = '#0F6FC6') +
+  geom_point(data_fin[[i]], mapping = aes(y = change_pp, color = age), size = 4) +
+  geom_text(data = data_fin[[i]] %>% 
+              filter(age == "Promedio"),
+            aes(y =  change_pp +.02, label = comma(change_pp, accuracy = 0.1)),
+            family = 'Century Gothic', fontface = "bold") +
+  geom_label(data = data_fin[[i]],
+             aes(y =  5.7, label = comma(value, accuracy = 0.1)),
+             family = 'Century Gothic', fontface = "bold")
+  
+
+asis_graph_col[[i]] <- ggfun_mul(asis_graph[[i]], data_fin1)
+}
+
+##### Evolución 
+
+consulta <- table %>% 
+  gather("indicator", "value", `Tasa neta de asistencia`:`Tasa asistencia por edad`) %>% 
+  ungroup %>% 
+  select(indicator) %>% 
+  distinct() %>% 
+  filter(!indicator == "Tasa terminación")
+
+consulta_2 <- table %>% 
+  gather("indicator", "value", `Tasa terminación`) %>% 
+  ungroup %>% 
+  select(indicator) %>% 
+  distinct() %>% 
+  filter(indicator == "Tasa terminación")
+
+vars <- set_names(consulta$indicator) 
+evolucion_list <-list()
+
+vars_2 <- set_names(consulta_2$indicator) 
+evolucion_list <-list()
+
+
+for (i in names(vars)) {
+
+evolucion_list[[i]] <- table %>%
+  left_join(paises, by = c("País"="country_name_en")) %>%
+  filter(isoalpha3 %in% c("CHL", "ARG", "BRA", "MEX", "COL", "ECU", "PER", "PRY", "SLV", "URY", "VEN")) %>% 
+  select(isoalpha3, region_bid, Año, i) %>% 
+  filter(!is.na(i))
+
+}
+
+for (i in names(vars_2)) {
+
+evolucion_list[[i]] <- table %>%
+  left_join(paises, by = c("País"="country_name_en")) %>%
+  filter(isoalpha3 %in% c("CHL", "ARG", "BRA", "MEX", "COL", "BOL", "ECU", "PER", "PRY", "SLV", "URY", "VEN")) %>% 
+  select(isoalpha3, region_bid, Año, i) %>% 
+  filter(!is.na(i))
+
+}
+
+evolucion_neta_plot <- ggfun_evo(evolucion_list[["Tasa neta de asistencia"]], evolucion_list[["Tasa neta de asistencia"]]$Año, evolucion_list[["Tasa neta de asistencia"]]$`Tasa neta de asistencia`)+
+labs(title = "Tasa neta de asistencia") +
+scale_y_continuous(labels = scales::percent_format(accuracy = 1))  
+
+evolucion_ninis_plot <- ggfun_evo(evolucion_list[["Ninis"]], evolucion_list[["Ninis"]]$Año, evolucion_list[["Ninis"]]$Ninis)+
+labs(title = "Jóvenes que no estudian ni trabajan") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
+
+evolucion_aband_plot <- ggfun_evo(evolucion_list[["Tasa abandono"]], evolucion_list[["Tasa abandono"]]$Año, evolucion_list[["Tasa abandono"]]$`Tasa abandono`)+
+labs(title = "Tasa de abandono") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
+
+evolucion_sobre_plot <- ggfun_evo(evolucion_list[["Tasa sobreedad"]], evolucion_list[["Tasa sobreedad"]]$Año, evolucion_list[["Tasa sobreedad"]]$`Tasa sobreedad`)+
+labs(title = "Tasa de sobreedad") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
+
+evolucion_term_plot <- ggfun_evo(evolucion_list[["Tasa terminación"]], evolucion_list[["Tasa terminación"]]$Año, evolucion_list[["Tasa terminación"]]$`Tasa terminación`)+
+labs(title = "Tasa de terminación") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
+
+evolucion_edad_plot <- ggfun_evo(evolucion_list[["Tasa asistencia por edad"]], evolucion_list[["Tasa asistencia por edad"]]$Año, evolucion_list[["Tasa asistencia por edad"]]$`Tasa asistencia por edad`)+
+labs(title = "Tasa de asistencia por edad") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))
+
+promedio_list <- list()
+
+promedio_plots <- list()
+
+consulta_age <- scldataR::scldata_dict %>% 
+  select(collection, indicator, label_es) %>% 
+  filter(indicator == 'tasa_asis_edad' | indicator == 'leavers' | indicator == 'Ninis_2')
+
+vars_age <- set_names(consulta_age$indicator) 
+
+##### Promedios con edad 
+
+for (i in names(vars_age)) {
+
+promedio_list[[i]] <- query_indicator(indicator = i, 
+                                      countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL', 
+                                      categories = "age") %>% 
+  mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019, 
+                          year == 2018 & isoalpha3 == "MEX" ~2019, 
+                          TRUE ~ year)) %>%
+  group_by(isoalpha3, year, indicator) %>% 
+  mutate(value = mean(value, na.rm = TRUE), 
+         age = "Promedio", 
+         sample = NA_character_, 
+         cv = NA_character_, 
+         se = NA_character_) %>%
+  distinct() %>%
+  rbind(grouped_mean(., value, year)) %>% 
+  ungroup() %>% 
+  group_by(isoalpha3) %>% 
+  mutate(value = case_when(value>1 ~ value/100, 
+                               TRUE ~ value)) %>% 
+   arrange(isoalpha3, year) %>% 
+  mutate(change_pp = (value - lag(value))*100) %>% 
+  filter(year == 2020) 
+
+promedio_plots[[i]] <- ggfun_prom(promedio_list[[i]], promedio_list[[i]]$isoalpha3, promedio_list[[i]]$change_pp)
+
+}
+
+##### Promedios con nivel educativo
+
+promedio_list_ed <- list()
+
+promedio_plots_ed <- list()
+
+consulta_ed <- scldataR::scldata_dict %>% 
+  select(collection, indicator, label_es) %>% 
+  filter(indicator == 'tasa_neta_asis' | indicator == 'tasa_sobre_edad' | indicator == 'tasa_terminacion_c')
+
+vars_ed <- set_names(consulta_ed$indicator) 
+
+for (i in names(vars_ed)) {
+
+promedio_list_ed[[i]] <- query_indicator(indicator = i,
+                         countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL',        
+                         categories = 'education_level') %>% 
+  mutate(year = case_when(isoalpha3 == "CHL" & year == 2017 ~ 2019,
+                          isoalpha3 == "MEX" & year == 2018 ~ 2019,
+                          TRUE ~ year)) %>%
+  group_by(isoalpha3, year, indicator) %>% 
+  mutate(value = mean(value, na.rm = TRUE), 
+         education_level = "Promedio", 
+         sample = NA_character_, 
+         cv = NA_character_, 
+         se = NA_character_) %>%
+  distinct() %>%
+  rbind(grouped_mean(., value, year)) %>% 
+  ungroup() %>% 
+  group_by(isoalpha3) %>% 
+  arrange(isoalpha3, year) %>% 
+  mutate(value = case_when(value>1 ~ value/100, 
+                               TRUE ~ value)) %>% 
+  mutate(change_pp = (value - lag(value))*100) %>% 
+  filter(year == 2020) 
+
+promedio_plots_ed[[i]] <- ggfun_prom(promedio_list_ed[[i]], promedio_list_ed[[i]]$isoalpha3, promedio_list_ed[[i]]$change_pp)
+
+}
+
+# # ##### Categoria una
+# 
+# table_edad <- query_indicator(indicator = 'tasa_asis_edad,leavers,Ninis_2', 
+#                          categories = 'age') %>% 
+#   mutate(year = case_when(isoalpha3 == "CHL" & year == 2017 ~ 2019,
+#                           isoalpha3 == "MEX" & year == 2018 ~ 2019,
+#                           TRUE ~ year)) %>% 
+#   group_by(isoalpha3, year, indicator) %>% 
+#   mutate(value = mean(value, na.rm = TRUE), 
+#          age = "Promedio", 
+#          sample = NA_character_, 
+#          cv = NA_character_, 
+#          se = NA_character_) %>%
+#   distinct() %>% 
+#   rbind(grouped_mean(., value, indicator, year)) %>% 
+#       ungroup()
+#  
+# categoria_list <-list()
+# 
+# categoria_plots <-list()
+# 
+# for (i in names(vars)) {
+# 
+# categoria_list[[i]] <- query_indicator(indicator = i,
+#                                        categories = 'age',
+#                                        countries = 'COL,ARG,PRY,ECU,MEX,CRI,SLV,BOL,PER,CHL,BRA',
+#                                        categories = 'age') %>%
+#   mutate(year = case_when(year == 2017 & isoalpha3 == "CHL" ~ 2019,
+#                           year == 2018 & isoalpha3 == "MEX" ~2019,
+#                           TRUE ~ year)) %>%
+#   rbind(grouped_mean(., value, area, year)) %>%
+#   ungroup() %>%
+#   group_by(isoalpha3, area) %>%
+#   arrange(isoalpha3, year) %>%
+#   mutate(change_pp = value - lag(value)) %>%
+#   filter(year == 2020)
+# 
+# categoria_plots[[i]] <- ggfun_one(categoria_list[[i]], categoria_list[[i]]$isoalpha3, categoria_list[[i]]$change_pp, categoria_list[[i]]$area)
+# 
+# }
+
+```
+
+
+En primer lugar, como resumen se presenta la siguiente tabla que contiene todos los indicadores analizados en esta sección para todos los países de 2006 a 2020. 
+
+Table \@ref(fig:eduTab): Tabla de indicadores de educación
+
+```{r eduTab, fig.cap="Source: SCLData", echo=FALSE, warning=FALSE, show_col_types = FALSE}
+
+  table %>% 
+  DT::datatable(., rownames = FALSE, 
+                filter = 'top', 
+                width = 750, 
+                options = list(pageLength = 15,
+                                scrollX = TRUE,
+                                searching = TRUE,
+                                lengthMenu = c(10,20,30,40,50),
+                                columnDefs = list(list(className = 'dt-center', targets = 0:5)))) %>% 
+   DT::formatPercentage(table = ., columns = c('Tasa neta de asistencia', 'Tasa sobreedad', 'Tasa terminación', 'Tasa abandono', 'Ninis', 'Tasa asistencia por edad'), digits = 2) %>%
+   DT::formatStyle(0:5,color = '#002126')
+
+
+```
+
+## Asistencia por edad 
+
+En general, todos los países para los que se tiene información en 2020 presentan una caída en asistencia escolar en 2020. Particularmente, se observa una disminución importante para Uruguay que paso de una tasa de asistencia de 86.2% a 41.4%, este dato debe ser revisado con especial atención. De forma similar, Brasil presenta una caída muy importante en 2019 que se recupera en 2020, por lo que el cambio entre 2019 y 2020 es muy grande y positivo, cuando en la mayoría de los países tienen una caída. Por lo anterior, los datos de Uruguay y Brasil no se presentan en los gráficos de cambios anuales de los indicadores, ya que incluirlos hace que el resto de los países pierda perspectiva visualmente y que el cambio promedio no refleje la mayoría de los países para los que se tiene información.
+
+```{r asis-edad-evol, results='asis', echo=FALSE, warning=FALSE, fig.cap="Evolución de la tasa de asistencia por edad", fig.height=8, fig.width=10}
+
+print(evolucion_edad_plot)
+
+```
+
+En cuanto al cambio promedio por país, sin considerar a Uruguay, Perú fue el país que presentó un mayor cambio con una caída de 5.9 puntos porcentuales, seguido de chile con una caída de 4.6 puntos porcentuales. En contraste, considerando el camibio promedio, calculado como la diferencia del porcentaje de asistencia promedio entre 2020 y 2019 parece no haber tenido cambios.
+
+```{r asis-edad-prom, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio en la tasa de asistencia por edad", fig.height=8, fig.width=10}
+
+print(promedio_plots$tasa_asis_edad)
+
+```
+
+Es interesante entender como los cambios provocados por la pandemia se experimentaron de distinta forma en personas con distinto ingreso, ya que en muchos aspectos las personas con menos ingresos tuvieron más afectaciones. Con este objetivo se presenta la tasa de asistencia por edad para el primer y quinto quintil de ingresos, que representan al 20% de la población más pobre y más rica respectivamente. 
+
+En primer lugar, considerando el primer quintil de la población el país con una disminución mayor fue Perú, con una caída de 7.4 puntos porcentuales. En este caso, como la caída fue mayor en el primer quintil que en promedio se puede decir que en Perú la población con menores ingresos sufrió una disrupción más drástica en la asistencia escolar. Esto será muy importante para futuras reacciones de políticas públicas, ya que podría afectar en el mediano plazo en cuestiones de pobreza y desigualdad. 
+
+```{r asis-1, results='asis', echo=FALSE, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio en la tasa de asistencia por edad en el primer quintil", fig.height=8, fig.width=10}
+
+print(asis_graph_col$quintile_1)
+
+```
+
+En cuanto al quinto quintil, que comprende al 20% cpn mayores ingresos de la población, todos los países menos Brasil tuvieron una disminución en la tasa de asistencia. Los países con una disminución más marcada fueron Chile y Colombia con una caída de 5.4 puntos porcentuales, seguidoo de Argentina que presentó una disminución de 4.9 puntos porcentuales en su tasa de asistencia. Observando ambas gráficas parece que únicamente en Perú el quintil de ingresos más pobre tuvo un mayor efecto en la disminución de la tasa de asistencia.
+
+```{r asis-5, results='asis', echo=FALSE, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio en la tasa de asistencia por edad en el quinto quintil", fig.height=8, fig.width=10}
+
+print(asis_graph_col$quintile_5)
+
+```
+
+## Asistencia neta 
+
+También es relevante analizar la tasa de asistencia neta en este contexto. Esta se refiere al porcentaje estudiantes que asiste a la escuela y que tiene la edad correspondiente al nivel al cual asiste, expresado como porcentaje de la población total de ese grupo de edad.
+En general, se observa una caída importante en el caso de Uruguay, y disminuciones menos marcadas para el resto de los países. Como en el caso anterior, para este indicador se excluye a Brasil y Uruguay en el análisis de cambio promedio, ya que su presencia cambia drásticamente el promedio general, así como el análisis visual.
+
+```{r asis-neta-evol, results='asis', echo=FALSE, warning=FALSE, fig.cap="Evolución de la tasa de asistencia por edad", fig.height=8, fig.width=10}
+
+print(evolucion_neta_plot)
+
+```
+
+Considerando el cambio promedio entre 2019 y 2020, el país con mayor caída fue Perú con una disminución de 5.7 puntos porcentuales, seguido de Chile y Colombia que presentaron una caída de 5.6 y 4.2 puntos porcentuales, respectivamente. En promedio, la tasa de asistencia neta disminuyó ligeramente con una caída de 0.5 puntos porcentuales.
+
+```{r asis-neta-prom, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio en la tasa de asistencia neta", fig.height=8, fig.width=10}
+
+print(promedio_plots_ed$tasa_neta_asis)
+
+```
+
+## Ninis
+
+Este indicador se refiere al porcentaje de jóvenes entre 15 y 24 años en condición de inactividad laboral, que tampoco están estudiando. La evolución de este indicador muestra un incremento del porcentaje de jóvenes ninis para muchos países, dentro de los que destacan los casos de Perú, Argentina y Chile.
+
+```{r ninis-evol, results='asis', echo=FALSE, warning=FALSE, fig.cap="Evolución del porcentaje de jóvenes que no estudian ni trabajan", fig.height=8, fig.width=10}
+
+print(evolucion_ninis_plot)
+
+```
+
+Considerando el cambio promedio entre 2019 y 2020 para este indicador Perú es el país con el cambio más drástico, con un aumento de 7.9 puntos porcentuales en el número de jóvenes que no estudian ni trabajan. En promedio, para los países con información en 2020 se observa un aumento de 2.0 puntos porcentuales en este indicaodr. El único país que no sufrió un aumento en este indicador fue El Salvador.
+
+
+```{r ninis-edad-prom, results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio en el porcentaje de jóvenes que no estudian ni trabajan", fig.height=8, fig.width=10}
+
+print(promedio_plots$Ninis_2)
+
+```
+
+## Tasa de abandono
+
+La tasa de abandono se refiere al porcentaje de jóvenes de 18 a 24 años que terminaron hasta secundaria baja como máximo nivel educastivo y no se encuentran estudiando. En este caso se observa una clara tendencia a la baja para el indicador entre 2006 y 2019, misma que se vio interrumpida en 2020 únicamente para algunos países. Este es el caso de Paraguay, Colombia y Argentina.
+
+```{r aband-evol, results='asis', echo=FALSE, warning=FALSE, fig.cap="Evolución de la tasa de abandono", fig.height=8, fig.width=10}
+
+print(evolucion_aband_plot)
+
+```
+
+En promedio, la tasa de abandono decreció 1.2 puntos porcentuales entre 2019 y 2020. 
+
+```{r aband-edad-prom,  results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio en el la tasa de abandono", fig.height=8, fig.width=10}
+
+print(promedio_plots$leavers)
+
+```
+
+## Tasa de terminación
+
+Este indicador muestra el porcentaje de jóvenes con edad de tres a cinco años mayor a la edad teórica para completar secundaria, que han completado ese nivel. La tendencia es similar a la tasa de abandono, particularmente se observa una tendencia de crecimiento de 2006 a 2019 prácticamente en todos los países, interrumpida para algunos países en 2020. 
+
+```{r term-evol, results='asis', echo=FALSE, warning=FALSE, fig.cap="Evolución de la tasa de terminación escolar", fig.height=8, fig.width=10}
+
+print(evolucion_term_plot)
+
+```
+
+Considerando la información del cambio promedio de este indicador entre 2019 y 2020, se puede observar que Bolivia, Argentina y Paraguay tuvieron una disminución de la tasa de terminación entre 2019 y 2020, mientras que en promedio y para el resto de los países este indicador aumento en este periodo.
+
+```{r term-ed-prom,  results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio en la tasa de terminación escolar", fig.height=8, fig.width=10}
+
+print(promedio_plots_ed$tasa_terminacion_c)
+
+```
+
+## Tasa de sobreedad
+
+La tasa de sobreedad se refiere a la proporción de alumnos cuya edad está por encima de las esperadas técnicamente para el año que están cursando. En este caso también se observa, en general, una tendencia a la baja en el periodo graficado. Sin embargo, en este indicador se ha experimentado más volatilidad en el periodo.
+
+
+```{r sobre-evol,  results='asis', echo=FALSE, warning=FALSE, fig.cap="Evolución de la tasa de sobreedad", fig.height=8, fig.width=10}
+
+print(evolucion_sobre_plot)
+
+```
+
+En promedio, la tasa de sobreedad entre 2019 y 2020 disminuyó ligeramente en 0.5 puntos porcentuales. El país con el cambio más notorio fue colombia en donde la tasa de sobreedad disminuyó en 0.8 puntos porcentuales.
+
+```{r sobre-ed-prom,  results='asis', echo=FALSE, warning=FALSE, fig.cap="Cambio en la tasa de sobreedad", fig.height=8, fig.width=10}
+
+print(promedio_plots_ed$tasa_sobre_edad)
+
+```
+

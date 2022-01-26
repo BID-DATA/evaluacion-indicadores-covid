@@ -4,6 +4,8 @@
 
 ##### Librerias #####
 
+devtools::install_github("BID-DATA/idbsocialdataR", force = TRUE)
+
 library(ggplot2)
 library(tidyverse)
 library(haven)
