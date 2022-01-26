@@ -90,9 +90,12 @@ evolucion_list[[i]] <- query_indicator(indicator = i,
                           year == 2018 & isoalpha3 == "MEX" ~2019, 
                           TRUE ~ year)) %>% 
   rbind(grouped_mean(., value, year)) %>% 
+  mutate(value = case_when(value>1 ~ value/100, 
+                               TRUE ~ value)) %>% 
   left_join(paises)
 
-evolucion_plots[[i]] <- ggfun_evo(evolucion_list[[i]], evolucion_list[[i]]$year, evolucion_list[[i]]$value)
+evolucion_plots[[i]] <- ggfun_evo(evolucion_list[[i]], evolucion_list[[i]]$year, evolucion_list[[i]]$value) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1))  
 
 }
 
@@ -127,7 +130,8 @@ table <- query_indicator(indicator = 'tasa_participacion,tasa_ocupacion,tasa_des
       rbind(grouped_mean(., value, indicator, year)) %>% 
       ungroup() %>% 
   select(country_name_es, year, indicator, value) %>% 
-  mutate(value = round(value, 2)) %>% 
+  mutate(value = case_when(value>1 ~ value/100, 
+                               TRUE ~ value)) %>% 
   spread(indicator, value) %>% 
   rename_all(funs(c('País', 'Año', 'Tasa de participación', 'Tasa de ocupación', 'Tasa desocupación', 'Población salario lab suficiente', 'duración desempleo'))) 
 
@@ -143,14 +147,15 @@ Tabla \@ref(fig:merTab) Indicadores de mercado laboral
   table %>% 
   DT::datatable(., rownames = FALSE, 
                 filter = 'top', 
-                width = 825, 
+                width = 800, 
                 options = list(pageLength = 20,
                                 scrollX = TRUE,
                                 searching = TRUE,
                                 searchHighlight = TRUE, 
                                 lengthMenu = c(10,20,30,40,50),
                                 columnDefs = list(list(className = 'dt-center', targets = 0:5)))) %>% 
-   DT::formatRound(table = ., columns = c('Tasa de participación', 'Tasa de ocupación', 'Tasa desocupación', 'Población salario lab suficiente', 'duración desempleo'), digits = 2, interval = 2) %>%
+   DT::formatPercentage(table = ., columns = c('Tasa de participación', 'Tasa de ocupación', 'Tasa desocupación', 'Población salario lab suficiente'), digits = 2, interval = 2) %>%
+   DT::formatRound(table =., columns = c('duración desempleo')) %>% 
    DT::formatStyle(0:5,color = '#002126')
 
 
